@@ -1,0 +1,82 @@
+aid: edgegap
+name: Edgegap
+review:
+  question: Does Edgegap expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-01'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. The Edgegap Arbitrium management surface
+    is REST/HTTPS only. Edgegap does support event delivery via webhooks
+    (webhook_url on sessions and relay sessions), which is HTTP callback
+    delivery, not a WebSocket or SSE stream. Under current API Evangelist scope
+    an AsyncAPI artifact is not warranted for outbound webhooks alone.
+findings:
+  summary: |
+    Edgegap does not publish a documented public WebSocket API. The Arbitrium
+    platform exposes REST (HTTPS) management endpoints under
+    https://api.edgegap.com (v1 and v2) for applications, versions,
+    deployments, sessions, matchmaking, relays, metrics, and private fleets.
+    Asynchronous status is delivered to integrators via outbound HTTP webhooks
+    (webhook_url), not a bidirectional WebSocket. Distributed relays carry
+    game traffic over raw UDP/TCP at the network layer between game clients and
+    servers - this is game transport, not a documented developer-facing
+    WebSocket (wss://) API. No wss:// management endpoint is documented.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.edgegap.com
+      documented: true
+    - protocol: Webhook
+      scheme: https
+      note: Outbound HTTP callbacks via webhook_url on sessions and relay sessions. Not WebSocket.
+      documented: true
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No developer-facing WebSocket management API is documented. WS/WSS appear only as selectable game-server port protocols on deployments, not as an Arbitrium control-plane API.
+  endpointsConfirmedRest:
+    - GET    https://api.edgegap.com/v1/app
+    - POST   https://api.edgegap.com/v1/app
+    - GET    https://api.edgegap.com/v1/app/{app_name}/versions
+    - POST   https://api.edgegap.com/v1/app/{app_name}/version
+    - GET    https://api.edgegap.com/v1/app/{app_name}/version/{version_name}
+    - POST   https://api.edgegap.com/v2/deployments
+    - GET    https://api.edgegap.com/v1/deployments
+    - GET    https://api.edgegap.com/v1/status/{deployment_id}
+    - DELETE https://api.edgegap.com/v1/stop/{deployment_id}
+    - POST   https://api.edgegap.com/v1/deployments/bulk-stop
+    - GET    https://api.edgegap.com/v1/deployment/{deployment_id}/container-logs
+    - GET    https://api.edgegap.com/v1/metrics/deployment/{deployment_id}
+    - POST   https://api.edgegap.com/v1/session
+    - GET    https://api.edgegap.com/v1/session/{session_id}
+    - DELETE https://api.edgegap.com/v1/session/{session_id}
+    - POST   https://api.edgegap.com/v1/relays/sessions
+    - GET    https://api.edgegap.com/v1/relays/sessions/{session_id}
+    - DELETE https://api.edgegap.com/v1/relays/sessions/{session_id}
+    - POST   https://api.edgegap.com/v2/private-fleets/deployments
+    - GET    https://api.edgegap.com/v2/private-fleets/{fleet-name}/hosts
+    - POST   {matchmaker-service-url}/tickets
+    - GET    {matchmaker-service-url}/tickets/{ticket_id}
+sources:
+  - url: https://docs.edgegap.com/docs/api
+    type: APIReference
+    note: API reference lists REST base URL https://api.edgegap.com; no WebSocket surface documented.
+  - url: https://docs.edgegap.com/docs/api/dedicated-servers
+    type: Documentation
+    note: Deployment, tag, and metrics endpoints are all HTTPS REST.
+  - url: https://docs.edgegap.com/docs/api/relays
+    type: Documentation
+    note: Relay sessions are managed via REST; async notifications delivered by webhook_url. Relay data plane is UDP/TCP game transport, not a WebSocket API.
+  - url: https://docs.edgegap.com/learn/api/matchmaking
+    type: Documentation
+    note: Matchmaking uses POST /tickets and GET /tickets/{id} on the matchmaker service; polling model, not WebSocket.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists, and no SSE stream is documented.
+    Asynchronous integration is via outbound HTTP webhooks only, so no AsyncAPI
+    artifact was authored. The apis.yml catalogs the REST management APIs with
+    a shared representative OpenAPI document.

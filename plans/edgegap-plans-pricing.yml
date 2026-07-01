@@ -1,0 +1,119 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Edgegap
+providerId: edgegap
+created: '2026-07-01'
+modified: '2026-07-01'
+reconciled: false
+tags:
+- Game Servers
+- Orchestration
+- Edge Computing
+- Matchmaking
+- Hosting
+- Plans
+description: >-
+  Edgegap offers a usage-based model for edge game-server orchestration. A free
+  tier lets studios start deploying dedicated servers without commitment, and
+  paid usage is metered on server compute time (vCPU/RAM per deployment-hour or
+  per-minute) plus egress bandwidth, with distributed relay traffic billed
+  separately. Enterprise agreements cover volume commitments, private/hybrid
+  fleets, and dedicated support. Specific per-unit rates are not reconciled in
+  this artifact.
+notes: >-
+  Verify current tiers and per-unit rates on the Edgegap pricing page during
+  reconciliation; game-server hosting rates vary by container size, region, and
+  bandwidth.
+sources:
+- https://edgegap.com/pricing
+- https://docs.edgegap.com/
+plans:
+- id: edgegap-free
+  name: Free
+  type: free
+  description: >-
+    Start deploying dedicated servers to the edge network with no commitment,
+    subject to account quotas. Good for prototyping and small playtests.
+  entries:
+  - label: Included Server Time
+    name: free_server_time
+    type: free
+    metric: server_hours
+    limit: 0
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free tier allowance, see pricing page
+    userMultiplied: false
+  elements:
+  - name: Deployments
+  - name: Sessions
+  - name: Matchmaking
+- id: edgegap-pay-as-you-go
+  name: Pay-as-you-go
+  type: usage
+  description: >-
+    Usage-metered dedicated server orchestration across the global edge
+    network, billed on server compute time and egress bandwidth.
+  entries:
+  - label: Server Compute Time
+    name: server_compute
+    type: usage
+    metric: server_hours
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: per vCPU/RAM server-hour, see pricing page
+    userMultiplied: false
+  - label: Egress Bandwidth
+    name: egress_bandwidth
+    type: usage
+    metric: gigabytes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: per GB egress, see pricing page
+    userMultiplied: false
+  - label: Distributed Relay Traffic
+    name: relay_traffic
+    type: usage
+    metric: gigabytes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: per GB relayed, see pricing page
+    userMultiplied: false
+  elements:
+  - name: Deployments
+  - name: Sessions
+  - name: Matchmaking
+  - name: Relays
+  - name: Metrics
+- id: edgegap-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Volume commitments, private/hybrid fleets on self-managed hosts,
+    dedicated support, and negotiated terms. Contact Edgegap sales.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Private Fleets
+  - name: Custom Volume Pricing
+  - name: Dedicated Support
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

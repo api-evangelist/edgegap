@@ -1,0 +1,229 @@
+{
+  "info": {
+    "name": "Edgegap Arbitrium API",
+    "description": "Representative Postman collection for the Edgegap Arbitrium REST API: applications, versions, deployments, sessions, matchmaking, relays, metrics, and private fleets. Auth via Authorization: token <your_token>.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "Authorization", "type": "string" },
+      { "key": "value", "value": "token {{authToken}}", "type": "string" },
+      { "key": "in", "value": "header", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.edgegap.com" },
+    { "key": "matchmakerUrl", "value": "https://your-matchmaker.example.com" }
+  ],
+  "item": [
+    {
+      "name": "Applications",
+      "item": [
+        {
+          "name": "List applications",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v1/app?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["v1", "app"], "query": [ { "key": "page", "value": "1" }, { "key": "limit", "value": "20" } ] }
+          }
+        },
+        {
+          "name": "Create application",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"my-game\",\n  \"is_active\": true,\n  \"is_telemetry_agent_active\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/v1/app", "host": ["{{baseUrl}}"], "path": ["v1", "app"] }
+          }
+        },
+        {
+          "name": "Get application",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v1/app/my-game", "host": ["{{baseUrl}}"], "path": ["v1", "app", "my-game"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "App Versions",
+      "item": [
+        {
+          "name": "List versions",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v1/app/my-game/versions", "host": ["{{baseUrl}}"], "path": ["v1", "app", "my-game", "versions"] }
+          }
+        },
+        {
+          "name": "Create version",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"v1\",\n  \"docker_repository\": \"registry.edgegap.com\",\n  \"docker_image\": \"my-game-server\",\n  \"docker_tag\": \"latest\",\n  \"vcpu\": 1,\n  \"memory\": 1024,\n  \"ports\": [ { \"port\": 7777, \"protocol\": \"UDP\", \"to_check\": true } ]\n}" },
+            "url": { "raw": "{{baseUrl}}/v1/app/my-game/version", "host": ["{{baseUrl}}"], "path": ["v1", "app", "my-game", "version"] }
+          }
+        },
+        {
+          "name": "Get version",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v1/app/my-game/version/v1", "host": ["{{baseUrl}}"], "path": ["v1", "app", "my-game", "version", "v1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Deployments",
+      "item": [
+        {
+          "name": "Create deployment",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"app_name\": \"my-game\",\n  \"version_name\": \"v1\",\n  \"ip_list\": [ \"162.254.0.1\", \"162.254.0.2\" ]\n}" },
+            "url": { "raw": "{{baseUrl}}/v2/deployments", "host": ["{{baseUrl}}"], "path": ["v2", "deployments"] }
+          }
+        },
+        {
+          "name": "List deployments",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v1/deployments", "host": ["{{baseUrl}}"], "path": ["v1", "deployments"] }
+          }
+        },
+        {
+          "name": "Get deployment status",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v1/status/:deployment_id", "host": ["{{baseUrl}}"], "path": ["v1", "status", ":deployment_id"], "variable": [ { "key": "deployment_id", "value": "" } ] }
+          }
+        },
+        {
+          "name": "Stop deployment",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/v1/stop/:deployment_id", "host": ["{{baseUrl}}"], "path": ["v1", "stop", ":deployment_id"], "variable": [ { "key": "deployment_id", "value": "" } ] }
+          }
+        },
+        {
+          "name": "Get container logs",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v1/deployment/:deployment_id/container-logs", "host": ["{{baseUrl}}"], "path": ["v1", "deployment", ":deployment_id", "container-logs"], "variable": [ { "key": "deployment_id", "value": "" } ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sessions",
+      "item": [
+        {
+          "name": "Create session",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"app_name\": \"my-game\",\n  \"version_name\": \"v1\",\n  \"ip_list\": [ \"162.254.0.1\" ]\n}" },
+            "url": { "raw": "{{baseUrl}}/v1/session", "host": ["{{baseUrl}}"], "path": ["v1", "session"] }
+          }
+        },
+        {
+          "name": "Get session",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v1/session/:session_id", "host": ["{{baseUrl}}"], "path": ["v1", "session", ":session_id"], "variable": [ { "key": "session_id", "value": "" } ] }
+          }
+        },
+        {
+          "name": "Delete session",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/v1/session/:session_id", "host": ["{{baseUrl}}"], "path": ["v1", "session", ":session_id"], "variable": [ { "key": "session_id", "value": "" } ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Matchmaking",
+      "item": [
+        {
+          "name": "Create ticket",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"profile\": \"default\",\n  \"attributes\": { \"skill\": 1200, \"mode\": \"ranked\" }\n}" },
+            "url": { "raw": "{{matchmakerUrl}}/tickets", "host": ["{{matchmakerUrl}}"], "path": ["tickets"] }
+          }
+        },
+        {
+          "name": "Poll ticket",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{matchmakerUrl}}/tickets/:ticket_id", "host": ["{{matchmakerUrl}}"], "path": ["tickets", ":ticket_id"], "variable": [ { "key": "ticket_id", "value": "" } ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Relays",
+      "item": [
+        {
+          "name": "Create relay session",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"webhook_url\": \"https://example.com/webhook\",\n  \"users\": [ { \"ip\": \"162.254.0.1\" }, { \"ip\": \"162.254.0.2\" } ]\n}" },
+            "url": { "raw": "{{baseUrl}}/v1/relays/sessions", "host": ["{{baseUrl}}"], "path": ["v1", "relays", "sessions"] }
+          }
+        },
+        {
+          "name": "Get relay session",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v1/relays/sessions/:session_id", "host": ["{{baseUrl}}"], "path": ["v1", "relays", "sessions", ":session_id"], "variable": [ { "key": "session_id", "value": "" } ] }
+          }
+        },
+        {
+          "name": "Delete relay session",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/v1/relays/sessions/:session_id", "host": ["{{baseUrl}}"], "path": ["v1", "relays", "sessions", ":session_id"], "variable": [ { "key": "session_id", "value": "" } ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics",
+      "item": [
+        {
+          "name": "Get deployment metrics",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v1/metrics/deployment/:deployment_id", "host": ["{{baseUrl}}"], "path": ["v1", "metrics", "deployment", ":deployment_id"], "variable": [ { "key": "deployment_id", "value": "" } ] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fleets",
+      "item": [
+        {
+          "name": "Create private fleet deployment",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"app_name\": \"my-game\",\n  \"version_name\": \"v1\"\n}" },
+            "url": { "raw": "{{baseUrl}}/v2/private-fleets/deployments", "host": ["{{baseUrl}}"], "path": ["v2", "private-fleets", "deployments"] }
+          }
+        },
+        {
+          "name": "List private fleet hosts",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/v2/private-fleets/:fleet_name/hosts", "host": ["{{baseUrl}}"], "path": ["v2", "private-fleets", ":fleet_name", "hosts"], "variable": [ { "key": "fleet_name", "value": "" } ] }
+          }
+        }
+      ]
+    }
+  ]
+}

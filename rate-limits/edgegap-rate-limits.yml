@@ -1,0 +1,60 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Edgegap
+providerId: edgegap
+created: '2026-07-01'
+modified: '2026-07-01'
+reconciled: false
+tags:
+- Game Servers
+- Orchestration
+- Edge Computing
+- Matchmaking
+- Hosting
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  The Edgegap Arbitrium API enforces per-account request rate limits and
+  concurrency quotas on management operations (creating deployments, sessions,
+  matchmaking tickets, and relay sessions). Concurrent deployment counts are
+  also bounded by the account tier. Specific per-endpoint values are not
+  reconciled in this artifact; excess requests return HTTP 429.
+notes: >-
+  Verify per-endpoint rate limits and concurrency quotas in the Edgegap
+  dashboard and documentation on reconciliation; limits vary by account tier.
+sources:
+- https://docs.edgegap.com/docs/api
+- https://edgegap.com/pricing
+responseCodes:
+  throttled: 429
+limits:
+- name: Management API Requests
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Per-account request rate on Arbitrium management endpoints.
+- name: Concurrent Deployments
+  scope: account
+  metric: deployments
+  limit: see provider documentation
+  notes: Maximum simultaneous running deployments, varies by tier.
+- name: Matchmaking Tickets
+  scope: account
+  metric: tickets
+  limit: see provider documentation
+  notes: Ticket creation rate on the matchmaker service.
+- name: Relay Sessions
+  scope: account
+  metric: sessions
+  limit: see provider documentation
+  notes: Concurrent relay session count, varies by tier.
+policies:
+- name: Tiered Limits
+  description: Quotas and concurrency raise as accounts move from free to paid and via Enterprise agreements.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After on 429 responses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

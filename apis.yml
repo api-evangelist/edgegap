@@ -1,0 +1,170 @@
+aid: edgegap
+url: https://raw.githubusercontent.com/api-evangelist/edgegap/refs/heads/main/apis.yml
+name: Edgegap
+kind: company
+description: Edgegap provides distributed edge game-server orchestration, hosting, and
+  matchmaking. Its Arbitrium platform auto-deploys dedicated game servers as containers
+  to the optimal edge location out of 615+ locations worldwide, reducing latency for
+  players. The REST API covers applications, versions, deployments, sessions, matchmaking,
+  distributed relays, monitoring, and private fleets.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Game Servers
+- Orchestration
+- Edge Computing
+- Matchmaking
+- Hosting
+created: '2026-07-01'
+modified: '2026-07-01'
+specificationVersion: '0.19'
+apis:
+- aid: edgegap:edgegap-applications-api
+  name: Edgegap Applications API
+  tags:
+  - Applications
+  - Game Servers
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  properties:
+  - url: https://docs.edgegap.com/docs/api/dedicated-servers
+    type: Documentation
+  - url: openapi/edgegap-openapi.yml
+    type: OpenAPI
+  description: Register and manage applications on Edgegap, including activation state
+    and telemetry agent configuration, via paginated list, create, get, update, and
+    delete operations under /v1/app.
+- aid: edgegap:edgegap-app-versions-api
+  name: Edgegap App Versions API
+  tags:
+  - App Versions
+  - Container Images
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.edgegap.com/docs/api/versioning
+  baseURL: https://api.edgegap.com
+  properties:
+  - url: https://docs.edgegap.com/docs/api/versioning
+    type: Documentation
+  - url: openapi/edgegap-openapi.yml
+    type: OpenAPI
+  description: Manage container image versions for an application - Docker repository/image/tag,
+    vCPU and memory, ports, environment variables, and session configuration - via
+    /v1/app/{app_name}/version endpoints.
+- aid: edgegap:edgegap-deployments-api
+  name: Edgegap Deployments API
+  tags:
+  - Deployments
+  - Dedicated Servers
+  - Edge
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.edgegap.com/learn/orchestration/deployments
+  baseURL: https://api.edgegap.com
+  properties:
+  - url: https://docs.edgegap.com/learn/orchestration/deployments
+    type: Documentation
+  - url: openapi/edgegap-openapi.yml
+    type: OpenAPI
+  description: Auto-deploy dedicated servers to the optimal edge location for supplied
+    player IPs or coordinates, then list, inspect status, tag, pull container logs,
+    and stop deployments via /v2/deployments and /v1/deployments endpoints.
+- aid: edgegap:edgegap-sessions-api
+  name: Edgegap Sessions API
+  tags:
+  - Sessions
+  - Player Management
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.edgegap.com/docs/session
+  baseURL: https://api.edgegap.com
+  properties:
+  - url: https://docs.edgegap.com/docs/session
+    type: Documentation
+  - url: openapi/edgegap-openapi.yml
+    type: OpenAPI
+  description: Dynamically add or remove players and groups of players on a running
+    deployment. Create, get, and delete sessions and list session users via /v1/session
+    endpoints for server-to-server session integration.
+- aid: edgegap:edgegap-matchmaking-api
+  name: Edgegap Matchmaking API
+  tags:
+  - Matchmaking
+  - Tickets
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.edgegap.com/learn/api/matchmaking
+  baseURL: https://api.edgegap.com
+  properties:
+  - url: https://docs.edgegap.com/learn/api/matchmaking
+    type: Documentation
+  - url: openapi/edgegap-openapi.yml
+    type: OpenAPI
+  description: Create and poll matchmaking tickets on a deployed matchmaker service.
+    Tickets are matched into groups and a server is auto-deployed at the edge for the
+    matched players, exposed via /tickets endpoints.
+- aid: edgegap:edgegap-relays-api
+  name: Edgegap Relays API
+  tags:
+  - Relays
+  - Networking
+  - Anti-DDoS
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.edgegap.com/docs/api/relays
+  baseURL: https://api.edgegap.com
+  properties:
+  - url: https://docs.edgegap.com/docs/api/relays
+    type: Documentation
+  - url: openapi/edgegap-openapi.yml
+    type: OpenAPI
+  description: Create distributed relay sessions that route peer-to-peer or client-server
+    traffic through Edgegap's network, hiding player IPs and mitigating DDoS. List,
+    get, delete sessions and authorize/revoke users via /v1/relays/sessions endpoints.
+- aid: edgegap:edgegap-metrics-api
+  name: Edgegap Metrics API
+  tags:
+  - Metrics
+  - Monitoring
+  - Telemetry
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  properties:
+  - url: https://docs.edgegap.com/docs/api/dedicated-servers
+    type: Documentation
+  - url: openapi/edgegap-openapi.yml
+    type: OpenAPI
+  description: Retrieve monitoring telemetry - CPU, memory, and network metrics - for
+    a running deployment via /v1/metrics/deployment/{deployment_id} to observe
+    dedicated server health at the edge.
+- aid: edgegap:edgegap-fleets-api
+  name: Edgegap Fleets API
+  tags:
+  - Fleets
+  - Private Hosts
+  - Hybrid
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+  baseURL: https://api.edgegap.com
+  properties:
+  - url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+    type: Documentation
+  - url: openapi/edgegap-openapi.yml
+    type: OpenAPI
+  description: Deploy onto self-managed hosts registered in a private fleet for hybrid
+    infrastructure, and enumerate fleet hosts, via /v2/private-fleets/deployments and
+    /v2/private-fleets/{fleet_name}/hosts.
+common:
+- type: GitHubOrganization
+  url: https://github.com/edgegap
+- type: LinkedIn
+  url: https://www.linkedin.com/company/edgegap
+- type: Website
+  url: https://edgegap.com/
+- type: Documentation
+  url: https://docs.edgegap.com/
+- type: Plans
+  url: plans/edgegap-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/edgegap-rate-limits.yml
+- type: FinOps
+  url: finops/edgegap-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

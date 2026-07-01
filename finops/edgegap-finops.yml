@@ -1,0 +1,99 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Edgegap
+providerId: edgegap
+created: '2026-07-01'
+modified: '2026-07-01'
+reconciled: false
+tags:
+- Game Servers
+- Orchestration
+- Edge Computing
+- Matchmaking
+- Hosting
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Edgegap spend. Edgegap bills usage-based rates for dedicated
+  game-server orchestration: server compute time (vCPU/RAM per deployment
+  duration), egress bandwidth per GB, and distributed relay traffic per GB.
+  A free tier and Enterprise volume commitments also apply. Cost is driven by
+  how long servers run, how many run concurrently, and how much bandwidth
+  players consume across edge locations.
+notes: >-
+  Per-unit rates are subject to change; verify against the Edgegap pricing page
+  during reconciliation.
+sources:
+- https://edgegap.com/pricing
+- https://docs.edgegap.com/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Edgegap
+serviceCategory: Compute
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Edgegap Arbitrium
+  ServiceCategory: Compute
+  ProviderName: Edgegap
+  PublisherName: Edgegap
+  InvoiceIssuerName: Edgegap
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: server_compute_hours
+  description: Dedicated server compute time billed by container size (vCPU/RAM) and deployment duration.
+  unit: hours
+  aggregation: sum
+  dimensions:
+  - account
+  - application
+  - location
+- name: egress_bandwidth_gb
+  description: Outbound network egress from deployed servers, billed per GB.
+  unit: gigabytes
+  aggregation: sum
+  dimensions:
+  - account
+  - deployment
+  - location
+- name: relay_traffic_gb
+  description: Traffic routed through distributed relay sessions, billed per GB.
+  unit: gigabytes
+  aggregation: sum
+  dimensions:
+  - account
+  - relay_session
+- name: concurrent_deployments
+  description: Peak concurrent running deployments, relevant to tier and capacity planning.
+  unit: deployments
+  aggregation: max
+  dimensions:
+  - account
+  - application
+principles:
+- name: Visibility
+  description: Pull Edgegap usage exports and deployment metrics; inspect server-hours and egress per application and location.
+- name: Allocation
+  description: Tag deployments per game/build/team; map to internal cost centers.
+- name: Optimization
+  description: Right-size container vCPU/RAM; stop idle deployments promptly; auto-deploy near players to cut egress; use private fleets for steady baseline load.
+- name: Accountability
+  description: Assign owners per game/environment; review server-hour and bandwidth spend monthly against budget.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

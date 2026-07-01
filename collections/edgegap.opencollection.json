@@ -1,0 +1,261 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Edgegap Arbitrium API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "apikey": {
+        "key": "Authorization",
+        "value": "token {{authToken}}",
+        "in": "header"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Applications", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List applications", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/app",
+            "params": [
+              { "name": "page", "value": "1", "type": "query" },
+              { "name": "limit", "value": "20", "type": "query" }
+            ]
+          },
+          "docs": "Returns a paginated list of applications for the account."
+        },
+        {
+          "info": { "name": "Create application", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/app",
+            "body": { "type": "json", "data": "{\"name\":\"my-game\",\"is_active\":true,\"is_telemetry_agent_active\":true}" }
+          },
+          "docs": "Registers a new application on Edgegap."
+        },
+        {
+          "info": { "name": "Get application", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/app/:app_name",
+            "params": [ { "name": "app_name", "value": "my-game", "type": "path" } ]
+          },
+          "docs": "Retrieves a single application by name."
+        }
+      ]
+    },
+    {
+      "info": { "name": "App Versions", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List versions", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/app/:app_name/versions",
+            "params": [ { "name": "app_name", "value": "my-game", "type": "path" } ]
+          },
+          "docs": "Lists all versions for an application."
+        },
+        {
+          "info": { "name": "Create version", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/app/:app_name/version",
+            "params": [ { "name": "app_name", "value": "my-game", "type": "path" } ],
+            "body": { "type": "json", "data": "{\"name\":\"v1\",\"docker_repository\":\"registry.edgegap.com\",\"docker_image\":\"my-game-server\",\"docker_tag\":\"latest\",\"vcpu\":1,\"memory\":1024,\"ports\":[{\"port\":7777,\"protocol\":\"UDP\",\"to_check\":true}]}" }
+          },
+          "docs": "Creates a new container image version for an application."
+        },
+        {
+          "info": { "name": "Get version", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/app/:app_name/version/:version_name",
+            "params": [
+              { "name": "app_name", "value": "my-game", "type": "path" },
+              { "name": "version_name", "value": "v1", "type": "path" }
+            ]
+          },
+          "docs": "Retrieves a specific application version."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Deployments", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create deployment", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v2/deployments",
+            "body": { "type": "json", "data": "{\"app_name\":\"my-game\",\"version_name\":\"v1\",\"ip_list\":[\"162.254.0.1\",\"162.254.0.2\"]}" }
+          },
+          "docs": "Auto-deploys a dedicated server to the optimal edge location for the supplied players."
+        },
+        {
+          "info": { "name": "List deployments", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.edgegap.com/v1/deployments" },
+          "docs": "Lists deployments for the account."
+        },
+        {
+          "info": { "name": "Get deployment status", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/status/:deployment_id",
+            "params": [ { "name": "deployment_id", "value": "", "type": "path" } ]
+          },
+          "docs": "Retrieves the current status of a deployment."
+        },
+        {
+          "info": { "name": "Stop deployment", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.edgegap.com/v1/stop/:deployment_id",
+            "params": [ { "name": "deployment_id", "value": "", "type": "path" } ]
+          },
+          "docs": "Stops a running deployment."
+        },
+        {
+          "info": { "name": "Get container logs", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/deployment/:deployment_id/container-logs",
+            "params": [ { "name": "deployment_id", "value": "", "type": "path" } ]
+          },
+          "docs": "Retrieves container logs for a deployment."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Sessions", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create session", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/session",
+            "body": { "type": "json", "data": "{\"app_name\":\"my-game\",\"version_name\":\"v1\",\"ip_list\":[\"162.254.0.1\"]}" }
+          },
+          "docs": "Creates a session with users, linked to a deployment."
+        },
+        {
+          "info": { "name": "Get session", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/session/:session_id",
+            "params": [ { "name": "session_id", "value": "", "type": "path" } ]
+          },
+          "docs": "Retrieves a session by ID."
+        },
+        {
+          "info": { "name": "Delete session", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.edgegap.com/v1/session/:session_id",
+            "params": [ { "name": "session_id", "value": "", "type": "path" } ]
+          },
+          "docs": "Deletes a session."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Matchmaking", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create ticket", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "{{matchmakerUrl}}/tickets",
+            "body": { "type": "json", "data": "{\"profile\":\"default\",\"attributes\":{\"skill\":1200,\"mode\":\"ranked\"}}" }
+          },
+          "docs": "Creates a new matchmaking ticket on a deployed matchmaker service."
+        },
+        {
+          "info": { "name": "Poll ticket", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "{{matchmakerUrl}}/tickets/:ticket_id",
+            "params": [ { "name": "ticket_id", "value": "", "type": "path" } ]
+          },
+          "docs": "Polls a matchmaking ticket by ID."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Relays", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create relay session", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/relays/sessions",
+            "body": { "type": "json", "data": "{\"webhook_url\":\"https://example.com/webhook\",\"users\":[{\"ip\":\"162.254.0.1\"},{\"ip\":\"162.254.0.2\"}]}" }
+          },
+          "docs": "Creates a distributed relay session with users and an optional webhook_url."
+        },
+        {
+          "info": { "name": "Get relay session", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/relays/sessions/:session_id",
+            "params": [ { "name": "session_id", "value": "", "type": "path" } ]
+          },
+          "docs": "Retrieves a relay session by ID."
+        },
+        {
+          "info": { "name": "Delete relay session", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.edgegap.com/v1/relays/sessions/:session_id",
+            "params": [ { "name": "session_id", "value": "", "type": "path" } ]
+          },
+          "docs": "Terminates a relay session."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Metrics", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get deployment metrics", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/metrics/deployment/:deployment_id",
+            "params": [ { "name": "deployment_id", "value": "", "type": "path" } ]
+          },
+          "docs": "Returns monitoring telemetry (CPU, memory, network) for a deployment."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Fleets", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create private fleet deployment", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v2/private-fleets/deployments",
+            "body": { "type": "json", "data": "{\"app_name\":\"my-game\",\"version_name\":\"v1\"}" }
+          },
+          "docs": "Deploys onto self-managed hosts registered in a private fleet."
+        },
+        {
+          "info": { "name": "List private fleet hosts", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v2/private-fleets/:fleet_name/hosts",
+            "params": [ { "name": "fleet_name", "value": "", "type": "path" } ]
+          },
+          "docs": "Enumerates hosts registered in a private fleet."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
