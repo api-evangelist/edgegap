@@ -151,6 +151,10 @@ apis:
     infrastructure, and enumerate fleet hosts, via /v2/private-fleets/deployments and
     /v2/private-fleets/{fleet_name}/hosts.
 common:
+- type: DomainSecurity
+  url: security/edgegap-domain-security.yml
+- type: Authentication
+  url: authentication/edgegap-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/edgegap
 - type: LinkedIn

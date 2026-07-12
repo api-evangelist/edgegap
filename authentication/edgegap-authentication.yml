@@ -1,0 +1,17 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/edgegap-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: AuthToken
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent
+    as `Authorization: token <your_token>`.'
+  sources:
+  - openapi/edgegap-openapi.yml
