@@ -151,6 +151,8 @@ apis:
     infrastructure, and enumerate fleet hosts, via /v2/private-fleets/deployments and
     /v2/private-fleets/{fleet_name}/hosts.
 common:
+- type: AgenticAccess
+  url: agentic-access/edgegap-agentic-access.yml
 - type: DomainSecurity
   url: security/edgegap-domain-security.yml
 - type: Authentication
