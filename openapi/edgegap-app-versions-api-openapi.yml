@@ -1,0 +1,187 @@
+openapi: 3.0.1
+info:
+  title: Edgegap Arbitrium App Versions API
+  description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
+  termsOfService: https://edgegap.com/terms-of-service/
+  contact:
+    name: Edgegap Support
+    url: https://edgegap.com/contact/
+  version: '1.0'
+servers:
+- url: https://api.edgegap.com
+  description: Edgegap Arbitrium Management API
+security:
+- AuthToken: []
+tags:
+- name: App Versions
+  description: Manage container image versions for an application.
+paths:
+  /v1/app/{app_name}/versions:
+    get:
+      operationId: listAppVersions
+      tags:
+      - App Versions
+      summary: List application versions
+      parameters:
+      - $ref: '#/components/parameters/AppName'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionList'
+  /v1/app/{app_name}/version:
+    post:
+      operationId: createAppVersion
+      tags:
+      - App Versions
+      summary: Create application version
+      description: Creates a new version (container image + runtime config) for an application.
+      parameters:
+      - $ref: '#/components/parameters/AppName'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionCreate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Version'
+  /v1/app/{app_name}/version/{version_name}:
+    get:
+      operationId: getAppVersion
+      tags:
+      - App Versions
+      summary: Get application version
+      parameters:
+      - $ref: '#/components/parameters/AppName'
+      - $ref: '#/components/parameters/VersionName'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Version'
+    patch:
+      operationId: updateAppVersion
+      tags:
+      - App Versions
+      summary: Update application version
+      parameters:
+      - $ref: '#/components/parameters/AppName'
+      - $ref: '#/components/parameters/VersionName'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionCreate'
+      responses:
+        '200':
+          description: OK
+    delete:
+      operationId: deleteAppVersion
+      tags:
+      - App Versions
+      summary: Delete application version
+      parameters:
+      - $ref: '#/components/parameters/AppName'
+      - $ref: '#/components/parameters/VersionName'
+      responses:
+        '200':
+          description: OK
+components:
+  parameters:
+    AppName:
+      name: app_name
+      in: path
+      required: true
+      schema:
+        type: string
+    VersionName:
+      name: version_name
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    VersionList:
+      type: object
+      properties:
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Version'
+    Port:
+      type: object
+      properties:
+        port:
+          type: integer
+        protocol:
+          type: string
+          enum:
+          - TCP
+          - UDP
+          - TCP/UDP
+          - WS
+          - WSS
+          - HTTP
+          - HTTPS
+        to_check:
+          type: boolean
+    VersionCreate:
+      type: object
+      required:
+      - name
+      - docker_image
+      properties:
+        name:
+          type: string
+        docker_repository:
+          type: string
+        docker_image:
+          type: string
+        docker_tag:
+          type: string
+        vcpu:
+          type: integer
+        memory:
+          type: integer
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/Port'
+    Version:
+      type: object
+      properties:
+        name:
+          type: string
+        docker_repository:
+          type: string
+        docker_image:
+          type: string
+        docker_tag:
+          type: string
+        vcpu:
+          type: integer
+        memory:
+          type: integer
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/Port'
+        is_active:
+          type: boolean
+  securitySchemes:
+    AuthToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent as `Authorization: token <your_token>`.'

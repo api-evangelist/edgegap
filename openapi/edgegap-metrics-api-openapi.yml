@@ -1,0 +1,44 @@
+openapi: 3.0.1
+info:
+  title: Edgegap Arbitrium App Versions Metrics API
+  description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
+  termsOfService: https://edgegap.com/terms-of-service/
+  contact:
+    name: Edgegap Support
+    url: https://edgegap.com/contact/
+  version: '1.0'
+servers:
+- url: https://api.edgegap.com
+  description: Edgegap Arbitrium Management API
+security:
+- AuthToken: []
+tags:
+- name: Metrics
+  description: Monitoring and telemetry for deployments.
+paths:
+  /v1/metrics/deployment/{deployment_id}:
+    get:
+      operationId: getDeploymentMetrics
+      tags:
+      - Metrics
+      summary: Get deployment metrics
+      description: Returns monitoring telemetry (CPU, memory, network) for a deployment.
+      parameters:
+      - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: OK
+components:
+  parameters:
+    DeploymentId:
+      name: deployment_id
+      in: path
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    AuthToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent as `Authorization: token <your_token>`.'

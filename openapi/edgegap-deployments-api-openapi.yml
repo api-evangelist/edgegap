@@ -1,0 +1,230 @@
+openapi: 3.0.1
+info:
+  title: Edgegap Arbitrium App Versions Deployments API
+  description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
+  termsOfService: https://edgegap.com/terms-of-service/
+  contact:
+    name: Edgegap Support
+    url: https://edgegap.com/contact/
+  version: '1.0'
+servers:
+- url: https://api.edgegap.com
+  description: Edgegap Arbitrium Management API
+security:
+- AuthToken: []
+tags:
+- name: Deployments
+  description: Deploy, inspect, and stop dedicated game servers at the edge.
+paths:
+  /v2/deployments:
+    post:
+      operationId: createDeployment
+      tags:
+      - Deployments
+      summary: Create deployment
+      description: Deploys an application version as a dedicated server, auto-selecting the optimal edge location for the supplied players/IPs or geo coordinates.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeploymentCreate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deployment'
+  /v1/deployments:
+    get:
+      operationId: listDeployments
+      tags:
+      - Deployments
+      summary: List deployments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentList'
+  /v1/status/{deployment_id}:
+    get:
+      operationId: getDeploymentStatus
+      tags:
+      - Deployments
+      summary: Get deployment status
+      parameters:
+      - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deployment'
+  /v1/stop/{deployment_id}:
+    delete:
+      operationId: stopDeployment
+      tags:
+      - Deployments
+      summary: Stop deployment
+      parameters:
+      - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: OK
+  /v1/deployments/bulk-stop:
+    post:
+      operationId: bulkStopDeployments
+      tags:
+      - Deployments
+      summary: Bulk stop deployments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deployments:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: OK
+  /v1/deployment/{deployment_id}/container-logs:
+    get:
+      operationId: getContainerLogs
+      tags:
+      - Deployments
+      summary: Get container logs
+      parameters:
+      - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: OK
+  /v1/deployments/{deployment_id}/tags:
+    get:
+      operationId: listDeploymentTags
+      tags:
+      - Deployments
+      summary: List deployment tags
+      parameters:
+      - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: OK
+    post:
+      operationId: addDeploymentTag
+      tags:
+      - Deployments
+      summary: Add deployment tag
+      parameters:
+      - $ref: '#/components/parameters/DeploymentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    Deployment:
+      type: object
+      properties:
+        request_id:
+          type: string
+        fqdn:
+          type: string
+        app_name:
+          type: string
+        app_version:
+          type: string
+        current_status:
+          type: string
+        running:
+          type: boolean
+        public_ip:
+          type: string
+        location:
+          type: object
+          properties:
+            city:
+              type: string
+            country:
+              type: string
+            continent:
+              type: string
+            latitude:
+              type: number
+            longitude:
+              type: number
+        ports:
+          type: object
+          additionalProperties:
+            type: object
+    DeploymentList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deployment'
+        total_count:
+          type: integer
+    DeploymentCreate:
+      type: object
+      required:
+      - app_name
+      - version_name
+      properties:
+        app_name:
+          type: string
+        version_name:
+          type: string
+        ip_list:
+          type: array
+          items:
+            type: string
+        geo_ip_list:
+          type: array
+          items:
+            type: object
+            properties:
+              ip:
+                type: string
+              latitude:
+                type: number
+              longitude:
+                type: number
+        env_vars:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              value:
+                type: string
+  parameters:
+    DeploymentId:
+      name: deployment_id
+      in: path
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    AuthToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent as `Authorization: token <your_token>`.'

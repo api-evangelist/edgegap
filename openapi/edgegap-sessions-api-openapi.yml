@@ -1,0 +1,122 @@
+openapi: 3.0.1
+info:
+  title: Edgegap Arbitrium App Versions Sessions API
+  description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
+  termsOfService: https://edgegap.com/terms-of-service/
+  contact:
+    name: Edgegap Support
+    url: https://edgegap.com/contact/
+  version: '1.0'
+servers:
+- url: https://api.edgegap.com
+  description: Edgegap Arbitrium Management API
+security:
+- AuthToken: []
+tags:
+- name: Sessions
+  description: Add and remove players or groups on a running deployment.
+paths:
+  /v1/session:
+    post:
+      operationId: createSession
+      tags:
+      - Sessions
+      summary: Create session
+      description: Creates a session with users, linked to a deployment.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionCreate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+  /v1/session/{session_id}:
+    get:
+      operationId: getSession
+      tags:
+      - Sessions
+      summary: Get session
+      parameters:
+      - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+    delete:
+      operationId: deleteSession
+      tags:
+      - Sessions
+      summary: Delete session
+      parameters:
+      - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: OK
+  /v1/session/{session_id}/users:
+    get:
+      operationId: listSessionUsers
+      tags:
+      - Sessions
+      summary: List session users
+      parameters:
+      - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    SessionCreate:
+      type: object
+      required:
+      - app_name
+      - version_name
+      properties:
+        app_name:
+          type: string
+        version_name:
+          type: string
+        deployment_request_id:
+          type: string
+        ip_list:
+          type: array
+          items:
+            type: string
+        webhook_url:
+          type: string
+    Session:
+      type: object
+      properties:
+        session_id:
+          type: string
+        status:
+          type: string
+        ready:
+          type: boolean
+        linked:
+          type: boolean
+        deployment_request_id:
+          type: string
+        user_count:
+          type: integer
+  parameters:
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    AuthToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent as `Authorization: token <your_token>`.'

@@ -1,0 +1,150 @@
+openapi: 3.0.1
+info:
+  title: Edgegap Arbitrium App Versions Applications API
+  description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
+  termsOfService: https://edgegap.com/terms-of-service/
+  contact:
+    name: Edgegap Support
+    url: https://edgegap.com/contact/
+  version: '1.0'
+servers:
+- url: https://api.edgegap.com
+  description: Edgegap Arbitrium Management API
+security:
+- AuthToken: []
+tags:
+- name: Applications
+  description: Manage applications registered on Edgegap.
+paths:
+  /v1/app:
+    get:
+      operationId: listApplications
+      tags:
+      - Applications
+      summary: List applications
+      description: Returns a paginated list of applications for the account.
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationList'
+    post:
+      operationId: createApplication
+      tags:
+      - Applications
+      summary: Create application
+      description: Registers a new application on Edgegap.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationCreate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+  /v1/app/{app_name}:
+    get:
+      operationId: getApplication
+      tags:
+      - Applications
+      summary: Get application
+      parameters:
+      - $ref: '#/components/parameters/AppName'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+    patch:
+      operationId: updateApplication
+      tags:
+      - Applications
+      summary: Update application
+      parameters:
+      - $ref: '#/components/parameters/AppName'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationCreate'
+      responses:
+        '200':
+          description: OK
+    delete:
+      operationId: deleteApplication
+      tags:
+      - Applications
+      summary: Delete application
+      parameters:
+      - $ref: '#/components/parameters/AppName'
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    ApplicationList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+        total_count:
+          type: integer
+    ApplicationCreate:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        is_active:
+          type: boolean
+        is_telemetry_agent_active:
+          type: boolean
+    Application:
+      type: object
+      properties:
+        name:
+          type: string
+        is_active:
+          type: boolean
+        is_telemetry_agent_active:
+          type: boolean
+        image:
+          type: string
+        create_time:
+          type: string
+          format: date-time
+  parameters:
+    AppName:
+      name: app_name
+      in: path
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    AuthToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent as `Authorization: token <your_token>`.'
