@@ -7,7 +7,20 @@ description: Edgegap provides distributed edge game-server orchestration, hostin
   to the optimal edge location out of 615+ locations worldwide, reducing latency for
   players. The REST API covers applications, versions, deployments, sessions, matchmaking,
   distributed relays, monitoring, and private fleets.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/edgegap.png
 tags:
 - Game Servers
 - Orchestration
@@ -18,138 +31,198 @@ created: '2026-07-01'
 modified: '2026-07-01'
 specificationVersion: '0.19'
 apis:
-- aid: edgegap:edgegap-applications-api
-  name: Edgegap Applications API
-  tags:
-  - Applications
-  - Game Servers
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
-  baseURL: https://api.edgegap.com
-  properties:
-  - url: https://docs.edgegap.com/docs/api/dedicated-servers
-    type: Documentation
-  - url: openapi/edgegap-openapi.yml
-    type: OpenAPI
-  description: Register and manage applications on Edgegap, including activation state
-    and telemetry agent configuration, via paginated list, create, get, update, and
-    delete operations under /v1/app.
 - aid: edgegap:edgegap-app-versions-api
   name: Edgegap App Versions API
-  tags:
-  - App Versions
-  - Container Images
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.edgegap.com/docs/api/versioning
-  baseURL: https://api.edgegap.com
-  properties:
-  - url: https://docs.edgegap.com/docs/api/versioning
-    type: Documentation
-  - url: openapi/edgegap-openapi.yml
-    type: OpenAPI
-  description: Manage container image versions for an application - Docker repository/image/tag,
-    vCPU and memory, ports, environment variables, and session configuration - via
-    /v1/app/{app_name}/version endpoints.
-- aid: edgegap:edgegap-deployments-api
-  name: Edgegap Deployments API
-  tags:
-  - Deployments
-  - Dedicated Servers
-  - Edge
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.edgegap.com/learn/orchestration/deployments
-  baseURL: https://api.edgegap.com
-  properties:
-  - url: https://docs.edgegap.com/learn/orchestration/deployments
-    type: Documentation
-  - url: openapi/edgegap-openapi.yml
-    type: OpenAPI
-  description: Auto-deploy dedicated servers to the optimal edge location for supplied
-    player IPs or coordinates, then list, inspect status, tag, pull container logs,
-    and stop deployments via /v2/deployments and /v1/deployments endpoints.
-- aid: edgegap:edgegap-sessions-api
-  name: Edgegap Sessions API
-  tags:
-  - Sessions
-  - Player Management
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.edgegap.com/docs/session
-  baseURL: https://api.edgegap.com
-  properties:
-  - url: https://docs.edgegap.com/docs/session
-    type: Documentation
-  - url: openapi/edgegap-openapi.yml
-    type: OpenAPI
-  description: Dynamically add or remove players and groups of players on a running
-    deployment. Create, get, and delete sessions and list session users via /v1/session
-    endpoints for server-to-server session integration.
-- aid: edgegap:edgegap-matchmaking-api
-  name: Edgegap Matchmaking API
-  tags:
-  - Matchmaking
-  - Tickets
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.edgegap.com/learn/api/matchmaking
-  baseURL: https://api.edgegap.com
-  properties:
-  - url: https://docs.edgegap.com/learn/api/matchmaking
-    type: Documentation
-  - url: openapi/edgegap-openapi.yml
-    type: OpenAPI
-  description: Create and poll matchmaking tickets on a deployed matchmaker service.
-    Tickets are matched into groups and a server is auto-deployed at the edge for the
-    matched players, exposed via /tickets endpoints.
-- aid: edgegap:edgegap-relays-api
-  name: Edgegap Relays API
-  tags:
-  - Relays
-  - Networking
-  - Anti-DDoS
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.edgegap.com/docs/api/relays
-  baseURL: https://api.edgegap.com
-  properties:
-  - url: https://docs.edgegap.com/docs/api/relays
-    type: Documentation
-  - url: openapi/edgegap-openapi.yml
-    type: OpenAPI
-  description: Create distributed relay sessions that route peer-to-peer or client-server
-    traffic through Edgegap's network, hiding player IPs and mitigating DDoS. List,
-    get, delete sessions and authorize/revoke users via /v1/relays/sessions endpoints.
-- aid: edgegap:edgegap-metrics-api
-  name: Edgegap Metrics API
-  tags:
-  - Metrics
-  - Monitoring
-  - Telemetry
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  description: Manage container image versions for an application.
   humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
   baseURL: https://api.edgegap.com
+  tags:
+  - App Versions
   properties:
-  - url: https://docs.edgegap.com/docs/api/dedicated-servers
-    type: Documentation
-  - url: openapi/edgegap-openapi.yml
-    type: OpenAPI
-  description: Retrieve monitoring telemetry - CPU, memory, and network metrics - for
-    a running deployment via /v1/metrics/deployment/{deployment_id} to observe
-    dedicated server health at the edge.
+  - type: OpenAPI
+    url: openapi/edgegap-app-versions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-applications-api
+  name: Edgegap Applications API
+  description: Manage applications registered on Edgegap.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Applications
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-applications-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-deployments-api
+  name: Edgegap Deployments API
+  description: Deploy, inspect, and stop dedicated game servers at the edge.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Deployments
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-deployments-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
 - aid: edgegap:edgegap-fleets-api
   name: Edgegap Fleets API
+  description: Private fleet deployments and host inventory.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
   tags:
   - Fleets
-  - Private Hosts
-  - Hybrid
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
-  baseURL: https://api.edgegap.com
   properties:
-  - url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
-    type: Documentation
-  - url: openapi/edgegap-openapi.yml
-    type: OpenAPI
-  description: Deploy onto self-managed hosts registered in a private fleet for hybrid
-    infrastructure, and enumerate fleet hosts, via /v2/private-fleets/deployments and
-    /v2/private-fleets/{fleet_name}/hosts.
+  - type: OpenAPI
+    url: openapi/edgegap-fleets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-matchmaking-api
+  name: Edgegap Matchmaking API
+  description: Create and poll matchmaking tickets.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Matchmaking
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-matchmaking-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-metrics-api
+  name: Edgegap Metrics API
+  description: Monitoring and telemetry for deployments.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-metrics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-relays-api
+  name: Edgegap Relays API
+  description: Distributed relay sessions and per-user authorization.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Relays
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-relays-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-sessions-api
+  name: Edgegap Sessions API
+  description: Add and remove players or groups on a running deployment.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
 common:
 - type: AgenticAccess
   url: agentic-access/edgegap-agentic-access.yml
