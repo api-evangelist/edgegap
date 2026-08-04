@@ -1,0 +1,28 @@
+{
+  "provider": "edgegap",
+  "sources": [
+    "edgegap-app-versions-api-openapi.yml",
+    "edgegap-applications-api-openapi.yml",
+    "edgegap-deployments-api-openapi.yml",
+    "edgegap-fleets-api-openapi.yml",
+    "edgegap-matchmaking-api-openapi.yml",
+    "edgegap-metrics-api-openapi.yml",
+    "edgegap-relays-api-openapi.yml",
+    "edgegap-sessions-api-openapi.yml"
+  ],
+  "outputs": [
+    "edgegap-app-versions-api-openapi.yml",
+    "edgegap-applications-api-openapi.yml",
+    "edgegap-deployments-api-openapi.yml",
+    "edgegap-fleets-api-openapi.yml",
+    "edgegap-matchmaking-api-openapi.yml",
+    "edgegap-metrics-api-openapi.yml",
+    "edgegap-relays-api-openapi.yml",
+    "edgegap-sessions-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
