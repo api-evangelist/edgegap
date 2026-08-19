@@ -1,0 +1,161 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Edgegap Arbitrium App Versions Deployments API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Deployments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v2/deployments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploys an application version as a dedicated server, auto-selecting the optimal edge location for the supplied players/IPs or geo coordinates."
+        },
+        {
+          "info": {
+            "name": "List deployments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/deployments"
+          },
+          "docs": "List deployments"
+        },
+        {
+          "info": {
+            "name": "Get deployment status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/status/:deployment_id",
+            "params": [
+              {
+                "name": "deployment_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get deployment status"
+        },
+        {
+          "info": {
+            "name": "Stop deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.edgegap.com/v1/stop/:deployment_id",
+            "params": [
+              {
+                "name": "deployment_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Stop deployment"
+        },
+        {
+          "info": {
+            "name": "Bulk stop deployments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/deployments/bulk-stop",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Bulk stop deployments"
+        },
+        {
+          "info": {
+            "name": "Get container logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/deployment/:deployment_id/container-logs",
+            "params": [
+              {
+                "name": "deployment_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get container logs"
+        },
+        {
+          "info": {
+            "name": "List deployment tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/deployments/:deployment_id/tags",
+            "params": [
+              {
+                "name": "deployment_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List deployment tags"
+        },
+        {
+          "info": {
+            "name": "Add deployment tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/deployments/:deployment_id/tags",
+            "params": [
+              {
+                "name": "deployment_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add deployment tag"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

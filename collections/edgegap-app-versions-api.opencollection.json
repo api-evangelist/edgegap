@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Edgegap Arbitrium App Versions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "App Versions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List application versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/app/:app_name/versions",
+            "params": [
+              {
+                "name": "app_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List application versions"
+        },
+        {
+          "info": {
+            "name": "Create application version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/app/:app_name/version",
+            "params": [
+              {
+                "name": "app_name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new version (container image + runtime config) for an application."
+        },
+        {
+          "info": {
+            "name": "Get application version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/app/:app_name/version/:version_name",
+            "params": [
+              {
+                "name": "app_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get application version"
+        },
+        {
+          "info": {
+            "name": "Update application version",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.edgegap.com/v1/app/:app_name/version/:version_name",
+            "params": [
+              {
+                "name": "app_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version_name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update application version"
+        },
+        {
+          "info": {
+            "name": "Delete application version",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.edgegap.com/v1/app/:app_name/version/:version_name",
+            "params": [
+              {
+                "name": "app_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete application version"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

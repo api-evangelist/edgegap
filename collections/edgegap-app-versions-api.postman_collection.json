@@ -1,0 +1,609 @@
+{
+  "item": [
+    {
+      "id": "7e4a742b-2133-4575-8484-24785f275cfa",
+      "name": "App Versions",
+      "description": {
+        "content": "Manage container image versions for an application.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "15c0e408-0fb6-4ee8-b272-fdda9bb5bc66",
+          "name": "List application versions",
+          "request": {
+            "name": "List application versions",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "app",
+                ":app_name",
+                "versions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c7982e76-2faf-48ea-8bb5-c5f1594daadc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "app",
+                    ":app_name",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"versions\": [\n    {\n      \"name\": \"string\",\n      \"docker_repository\": \"string\",\n      \"docker_image\": \"string\",\n      \"docker_tag\": \"string\",\n      \"vcpu\": 4278,\n      \"memory\": 736,\n      \"ports\": [\n        {\n          \"port\": 3022,\n          \"protocol\": \"HTTPS\",\n          \"to_check\": false\n        },\n        {\n          \"port\": 3208,\n          \"protocol\": \"WS\",\n          \"to_check\": true\n        }\n      ],\n      \"is_active\": false\n    },\n    {\n      \"name\": \"string\",\n      \"docker_repository\": \"string\",\n      \"docker_image\": \"string\",\n      \"docker_tag\": \"string\",\n      \"vcpu\": 3318,\n      \"memory\": 8422,\n      \"ports\": [\n        {\n          \"port\": 5087,\n          \"protocol\": \"WS\",\n          \"to_check\": true\n        },\n        {\n          \"port\": 1986,\n          \"protocol\": \"HTTPS\",\n          \"to_check\": true\n        }\n      ],\n      \"is_active\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b0de77fd-1dc2-4edb-ad26-da0b5530138f",
+          "name": "Create application version",
+          "request": {
+            "name": "Create application version",
+            "description": {
+              "content": "Creates a new version (container image + runtime config) for an application.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "app",
+                ":app_name",
+                "version"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"docker_image\": \"<string>\",\n  \"docker_repository\": \"<string>\",\n  \"docker_tag\": \"<string>\",\n  \"vcpu\": \"<integer>\",\n  \"memory\": \"<integer>\",\n  \"ports\": [\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    },\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4b4bdf22-849f-4759-91c0-a69ddd524dd7",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "app",
+                    ":app_name",
+                    "version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"docker_image\": \"<string>\",\n  \"docker_repository\": \"<string>\",\n  \"docker_tag\": \"<string>\",\n  \"vcpu\": \"<integer>\",\n  \"memory\": \"<integer>\",\n  \"ports\": [\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    },\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"docker_repository\": \"string\",\n  \"docker_image\": \"string\",\n  \"docker_tag\": \"string\",\n  \"vcpu\": 1381,\n  \"memory\": 9880,\n  \"ports\": [\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    },\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    }\n  ],\n  \"is_active\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e5f0cef8-4153-4253-a9bd-eff19115c3fb",
+          "name": "Get application version",
+          "request": {
+            "name": "Get application version",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "app",
+                ":app_name",
+                "version",
+                ":version_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "version_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a09a070d-d1b1-4354-ac46-be085608b26a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "app",
+                    ":app_name",
+                    "version",
+                    ":version_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "version_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"docker_repository\": \"string\",\n  \"docker_image\": \"string\",\n  \"docker_tag\": \"string\",\n  \"vcpu\": 1381,\n  \"memory\": 9880,\n  \"ports\": [\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    },\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    }\n  ],\n  \"is_active\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fae5256d-bfe5-44bf-bf48-5b1203460ce0",
+          "name": "Update application version",
+          "request": {
+            "name": "Update application version",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "app",
+                ":app_name",
+                "version",
+                ":version_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "version_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"docker_image\": \"<string>\",\n  \"docker_repository\": \"<string>\",\n  \"docker_tag\": \"<string>\",\n  \"vcpu\": \"<integer>\",\n  \"memory\": \"<integer>\",\n  \"ports\": [\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    },\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5a6ce8cf-80bb-4834-863b-41e097ac745d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "app",
+                    ":app_name",
+                    "version",
+                    ":version_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "version_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"docker_image\": \"<string>\",\n  \"docker_repository\": \"<string>\",\n  \"docker_tag\": \"<string>\",\n  \"vcpu\": \"<integer>\",\n  \"memory\": \"<integer>\",\n  \"ports\": [\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    },\n    {\n      \"port\": \"<integer>\",\n      \"protocol\": \"<string>\",\n      \"to_check\": \"<boolean>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "07c10448-1392-4bb6-8c03-56d626b4864b",
+          "name": "Delete application version",
+          "request": {
+            "name": "Delete application version",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "app",
+                ":app_name",
+                "version",
+                ":version_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "app_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "version_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "07c1c410-8af9-4dcb-a0f6-635a0411241e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "app",
+                    ":app_name",
+                    "version",
+                    ":version_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "app_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "version_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.edgegap.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "522b6b54-4b20-45dd-8329-6deb3382a98d",
+    "name": "Edgegap Arbitrium App Versions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.\n\nContact Support:\n Name: Edgegap Support",
+      "type": "text/plain"
+    }
+  }
+}

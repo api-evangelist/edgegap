@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Edgegap Arbitrium App Versions Fleets API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fleets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create private fleet deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v2/private-fleets/deployments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploys onto self-managed hosts registered in a private fleet."
+        },
+        {
+          "info": {
+            "name": "List private fleet hosts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v2/private-fleets/:fleet_name/hosts",
+            "params": [
+              {
+                "name": "fleet_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List private fleet hosts"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

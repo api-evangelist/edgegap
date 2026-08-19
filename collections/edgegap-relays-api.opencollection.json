@@ -1,0 +1,118 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Edgegap Arbitrium App Versions Relays API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Relays",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List relay sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/relays/sessions"
+          },
+          "docs": "List relay sessions"
+        },
+        {
+          "info": {
+            "name": "Create relay session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/relays/sessions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a distributed relay session with users and an optional webhook_url."
+        },
+        {
+          "info": {
+            "name": "Get relay session",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/relays/sessions/:session_id",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get relay session"
+        },
+        {
+          "info": {
+            "name": "Delete relay session",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.edgegap.com/v1/relays/sessions/:session_id",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete relay session"
+        },
+        {
+          "info": {
+            "name": "Authorize relay user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/relays/sessions:authorize-user",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Grants a user access to a relay session (requires session_id and user_ip)."
+        },
+        {
+          "info": {
+            "name": "Revoke relay user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/relays/sessions:revoke-user",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes a user's access to a relay session."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

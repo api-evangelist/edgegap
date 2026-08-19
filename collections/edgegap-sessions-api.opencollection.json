@@ -1,0 +1,95 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Edgegap Arbitrium App Versions Sessions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sessions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.edgegap.com/v1/session",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a session with users, linked to a deployment."
+        },
+        {
+          "info": {
+            "name": "Get session",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/session/:session_id",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get session"
+        },
+        {
+          "info": {
+            "name": "Delete session",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.edgegap.com/v1/session/:session_id",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete session"
+        },
+        {
+          "info": {
+            "name": "List session users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.edgegap.com/v1/session/:session_id/users",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List session users"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
