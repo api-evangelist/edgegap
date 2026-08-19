@@ -29,7 +29,7 @@ tags:
 - Hosting
 created: '2026-07-01'
 modified: '2026-07-01'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: edgegap:edgegap-app-versions-api
   name: Edgegap App Versions API
