@@ -61,6 +61,8 @@ apis:
   humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
   baseURL: https://api.edgegap.com
   tags:
+  - Application
+  tags_raw:
   - Applications
   properties:
   - type: OpenAPI
@@ -85,6 +87,8 @@ apis:
   humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
   baseURL: https://api.edgegap.com
   tags:
+  - Deployment
+  tags_raw:
   - Deployments
   properties:
   - type: OpenAPI
