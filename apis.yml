@@ -125,6 +125,8 @@ apis:
   humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
   baseURL: https://api.edgegap.com
   tags:
+  - Fleet
+  tags_raw:
   - Fleets
   properties:
   - type: OpenAPI
@@ -197,6 +199,8 @@ apis:
   humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
   baseURL: https://api.edgegap.com
   tags:
+  - Relay
+  tags_raw:
   - Relays
   properties:
   - type: OpenAPI
