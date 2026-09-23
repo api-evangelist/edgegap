@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Edgegap Arbitrium App Versions Sessions API
+  title: Edgegap Arbitrium Sessions API
   description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
   termsOfService: https://edgegap.com/terms-of-service/
   contact:
@@ -74,6 +74,21 @@ paths:
           description: OK
 components:
   schemas:
+    Session:
+      type: object
+      properties:
+        session_id:
+          type: string
+        status:
+          type: string
+        ready:
+          type: boolean
+        linked:
+          type: boolean
+        deployment_request_id:
+          type: string
+        user_count:
+          type: integer
     SessionCreate:
       type: object
       required:
@@ -92,21 +107,6 @@ components:
             type: string
         webhook_url:
           type: string
-    Session:
-      type: object
-      properties:
-        session_id:
-          type: string
-        status:
-          type: string
-        ready:
-          type: boolean
-        linked:
-          type: boolean
-        deployment_request_id:
-          type: string
-        user_count:
-          type: integer
   parameters:
     SessionId:
       name: session_id

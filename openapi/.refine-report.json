@@ -1,14 +1,7 @@
 {
   "provider": "edgegap",
   "sources": [
-    "edgegap-app-versions-api-openapi.yml",
-    "edgegap-applications-api-openapi.yml",
-    "edgegap-deployments-api-openapi.yml",
-    "edgegap-fleets-api-openapi.yml",
-    "edgegap-matchmaking-api-openapi.yml",
-    "edgegap-metrics-api-openapi.yml",
-    "edgegap-relays-api-openapi.yml",
-    "edgegap-sessions-api-openapi.yml"
+    "_original/edgegap-openapi.yml"
   ],
   "outputs": [
     "edgegap-app-versions-api-openapi.yml",
@@ -23,6 +16,19 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "edgegap-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "edgegap-app-versions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgegap-applications-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgegap-deployments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgegap-fleets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgegap-matchmaking-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgegap-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgegap-relays-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgegap-sessions-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
