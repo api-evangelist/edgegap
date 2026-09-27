@@ -73,6 +73,13 @@ paths:
         '200':
           description: OK
 components:
+  parameters:
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
     Session:
       type: object
@@ -107,13 +114,6 @@ components:
             type: string
         webhook_url:
           type: string
-  parameters:
-    SessionId:
-      name: session_id
-      in: path
-      required: true
-      schema:
-        type: string
   securitySchemes:
     AuthToken:
       type: apiKey

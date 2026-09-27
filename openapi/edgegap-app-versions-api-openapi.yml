@@ -98,24 +98,27 @@ paths:
         '200':
           description: OK
 components:
+  parameters:
+    AppName:
+      name: app_name
+      in: path
+      required: true
+      schema:
+        type: string
+    VersionName:
+      name: version_name
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
-    Port:
+    VersionList:
       type: object
       properties:
-        port:
-          type: integer
-        protocol:
-          type: string
-          enum:
-          - TCP
-          - UDP
-          - TCP/UDP
-          - WS
-          - WSS
-          - HTTP
-          - HTTPS
-        to_check:
-          type: boolean
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Version'
     VersionCreate:
       type: object
       required:
@@ -138,6 +141,23 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Port'
+    Port:
+      type: object
+      properties:
+        port:
+          type: integer
+        protocol:
+          type: string
+          enum:
+          - TCP
+          - UDP
+          - TCP/UDP
+          - WS
+          - WSS
+          - HTTP
+          - HTTPS
+        to_check:
+          type: boolean
     Version:
       type: object
       properties:
@@ -159,26 +179,6 @@ components:
             $ref: '#/components/schemas/Port'
         is_active:
           type: boolean
-    VersionList:
-      type: object
-      properties:
-        versions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Version'
-  parameters:
-    VersionName:
-      name: version_name
-      in: path
-      required: true
-      schema:
-        type: string
-    AppName:
-      name: app_name
-      in: path
-      required: true
-      schema:
-        type: string
   securitySchemes:
     AuthToken:
       type: apiKey

@@ -122,15 +122,6 @@ components:
         create_time:
           type: string
           format: date-time
-    ApplicationList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Application'
-        total_count:
-          type: integer
     ApplicationCreate:
       type: object
       required:
@@ -142,6 +133,15 @@ components:
           type: boolean
         is_telemetry_agent_active:
           type: boolean
+    ApplicationList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+        total_count:
+          type: integer
   securitySchemes:
     AuthToken:
       type: apiKey
