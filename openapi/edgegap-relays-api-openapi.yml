@@ -112,13 +112,6 @@ paths:
         '200':
           description: OK
 components:
-  parameters:
-    SessionId:
-      name: session_id
-      in: path
-      required: true
-      schema:
-        type: string
   schemas:
     RelaySessionCreate:
       type: object
@@ -148,6 +141,13 @@ components:
                 type: string
               port:
                 type: integer
+  parameters:
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      schema:
+        type: string
   securitySchemes:
     AuthToken:
       type: apiKey

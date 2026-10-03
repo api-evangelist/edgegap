@@ -99,26 +99,36 @@ paths:
           description: OK
 components:
   parameters:
-    AppName:
-      name: app_name
-      in: path
-      required: true
-      schema:
-        type: string
     VersionName:
       name: version_name
       in: path
       required: true
       schema:
         type: string
+    AppName:
+      name: app_name
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
-    VersionList:
+    Port:
       type: object
       properties:
-        versions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Version'
+        port:
+          type: integer
+        protocol:
+          type: string
+          enum:
+          - TCP
+          - UDP
+          - TCP/UDP
+          - WS
+          - WSS
+          - HTTP
+          - HTTPS
+        to_check:
+          type: boolean
     VersionCreate:
       type: object
       required:
@@ -141,23 +151,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Port'
-    Port:
+    VersionList:
       type: object
       properties:
-        port:
-          type: integer
-        protocol:
-          type: string
-          enum:
-          - TCP
-          - UDP
-          - TCP/UDP
-          - WS
-          - WSS
-          - HTTP
-          - HTTPS
-        to_check:
-          type: boolean
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Version'
     Version:
       type: object
       properties:

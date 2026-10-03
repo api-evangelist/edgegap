@@ -71,6 +71,14 @@ paths:
           description: OK
 components:
   schemas:
+    TicketCreate:
+      type: object
+      properties:
+        profile:
+          type: string
+        attributes:
+          type: object
+          additionalProperties: true
     Ticket:
       type: object
       properties:
@@ -91,14 +99,6 @@ components:
               type: string
             port:
               type: integer
-    TicketCreate:
-      type: object
-      properties:
-        profile:
-          type: string
-        attributes:
-          type: object
-          additionalProperties: true
   securitySchemes:
     AuthToken:
       type: apiKey

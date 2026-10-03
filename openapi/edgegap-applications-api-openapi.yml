@@ -108,6 +108,26 @@ components:
       schema:
         type: string
   schemas:
+    ApplicationList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+        total_count:
+          type: integer
+    ApplicationCreate:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        is_active:
+          type: boolean
+        is_telemetry_agent_active:
+          type: boolean
     Application:
       type: object
       properties:
@@ -122,26 +142,6 @@ components:
         create_time:
           type: string
           format: date-time
-    ApplicationCreate:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        is_active:
-          type: boolean
-        is_telemetry_agent_active:
-          type: boolean
-    ApplicationList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Application'
-        total_count:
-          type: integer
   securitySchemes:
     AuthToken:
       type: apiKey
