@@ -33,12 +33,15 @@ accessModel:
   generated: '2026-07-22'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/edgegap.png
+x-docs-platform: gitbook
+x-docs-platform-confidence: high
+x-docs-platform-checked: 2026-10-03
 tags:
 - Game Servers
-- Orchestration
 - Edge Computing
 - Matchmaking
 - Hosting
+- Container Orchestration
 created: '2026-07-01'
 modified: '2026-07-01'
 specificationVersion: '0.23'
@@ -267,3 +270,5 @@ common:
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
+x-tags-removed:
+- Orchestration
