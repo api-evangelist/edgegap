@@ -108,6 +108,20 @@ components:
       schema:
         type: string
   schemas:
+    Application:
+      type: object
+      properties:
+        name:
+          type: string
+        is_active:
+          type: boolean
+        is_telemetry_agent_active:
+          type: boolean
+        image:
+          type: string
+        create_time:
+          type: string
+          format: date-time
     ApplicationList:
       type: object
       properties:
@@ -128,20 +142,6 @@ components:
           type: boolean
         is_telemetry_agent_active:
           type: boolean
-    Application:
-      type: object
-      properties:
-        name:
-          type: string
-        is_active:
-          type: boolean
-        is_telemetry_agent_active:
-          type: boolean
-        image:
-          type: string
-        create_time:
-          type: string
-          format: date-time
   securitySchemes:
     AuthToken:
       type: apiKey

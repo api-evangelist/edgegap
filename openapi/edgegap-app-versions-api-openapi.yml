@@ -98,20 +98,35 @@ paths:
         '200':
           description: OK
 components:
-  parameters:
-    VersionName:
-      name: version_name
-      in: path
-      required: true
-      schema:
-        type: string
-    AppName:
-      name: app_name
-      in: path
-      required: true
-      schema:
-        type: string
   schemas:
+    Version:
+      type: object
+      properties:
+        name:
+          type: string
+        docker_repository:
+          type: string
+        docker_image:
+          type: string
+        docker_tag:
+          type: string
+        vcpu:
+          type: integer
+        memory:
+          type: integer
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/Port'
+        is_active:
+          type: boolean
+    VersionList:
+      type: object
+      properties:
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Version'
     Port:
       type: object
       properties:
@@ -151,34 +166,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Port'
-    VersionList:
-      type: object
-      properties:
-        versions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Version'
-    Version:
-      type: object
-      properties:
-        name:
-          type: string
-        docker_repository:
-          type: string
-        docker_image:
-          type: string
-        docker_tag:
-          type: string
-        vcpu:
-          type: integer
-        memory:
-          type: integer
-        ports:
-          type: array
-          items:
-            $ref: '#/components/schemas/Port'
-        is_active:
-          type: boolean
+  parameters:
+    VersionName:
+      name: version_name
+      in: path
+      required: true
+      schema:
+        type: string
+    AppName:
+      name: app_name
+      in: path
+      required: true
+      schema:
+        type: string
   securitySchemes:
     AuthToken:
       type: apiKey

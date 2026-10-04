@@ -137,23 +137,7 @@ paths:
         '200':
           description: OK
 components:
-  parameters:
-    DeploymentId:
-      name: deployment_id
-      in: path
-      required: true
-      schema:
-        type: string
   schemas:
-    DeploymentList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Deployment'
-        total_count:
-          type: integer
     Deployment:
       type: object
       properties:
@@ -188,6 +172,15 @@ components:
           type: object
           additionalProperties:
             type: object
+    DeploymentList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Deployment'
+        total_count:
+          type: integer
     DeploymentCreate:
       type: object
       required:
@@ -222,6 +215,13 @@ components:
                 type: string
               value:
                 type: string
+  parameters:
+    DeploymentId:
+      name: deployment_id
+      in: path
+      required: true
+      schema:
+        type: string
   securitySchemes:
     AuthToken:
       type: apiKey
