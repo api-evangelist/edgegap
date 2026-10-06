@@ -43,7 +43,7 @@ tags:
 - Hosting
 - Container Orchestration
 created: '2026-07-01'
-modified: '2026-07-01'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
 - aid: edgegap:edgegap-app-versions-api
@@ -247,6 +247,8 @@ apis:
   - type: Documentation
     url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
 common:
+- url: https://edgegap.com/blog
+  type: Blog
 - type: AgenticAccess
   url: agentic-access/edgegap-agentic-access.yml
 - type: DomainSecurity
