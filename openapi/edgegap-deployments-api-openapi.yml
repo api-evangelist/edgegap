@@ -137,41 +137,14 @@ paths:
         '200':
           description: OK
 components:
+  parameters:
+    DeploymentId:
+      name: deployment_id
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
-    Deployment:
-      type: object
-      properties:
-        request_id:
-          type: string
-        fqdn:
-          type: string
-        app_name:
-          type: string
-        app_version:
-          type: string
-        current_status:
-          type: string
-        running:
-          type: boolean
-        public_ip:
-          type: string
-        location:
-          type: object
-          properties:
-            city:
-              type: string
-            country:
-              type: string
-            continent:
-              type: string
-            latitude:
-              type: number
-            longitude:
-              type: number
-        ports:
-          type: object
-          additionalProperties:
-            type: object
     DeploymentList:
       type: object
       properties:
@@ -215,13 +188,40 @@ components:
                 type: string
               value:
                 type: string
-  parameters:
-    DeploymentId:
-      name: deployment_id
-      in: path
-      required: true
-      schema:
-        type: string
+    Deployment:
+      type: object
+      properties:
+        request_id:
+          type: string
+        fqdn:
+          type: string
+        app_name:
+          type: string
+        app_version:
+          type: string
+        current_status:
+          type: string
+        running:
+          type: boolean
+        public_ip:
+          type: string
+        location:
+          type: object
+          properties:
+            city:
+              type: string
+            country:
+              type: string
+            continent:
+              type: string
+            latitude:
+              type: number
+            longitude:
+              type: number
+        ports:
+          type: object
+          additionalProperties:
+            type: object
   securitySchemes:
     AuthToken:
       type: apiKey

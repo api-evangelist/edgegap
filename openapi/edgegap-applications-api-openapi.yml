@@ -100,13 +100,6 @@ paths:
         '200':
           description: OK
 components:
-  parameters:
-    AppName:
-      name: app_name
-      in: path
-      required: true
-      schema:
-        type: string
   schemas:
     Application:
       type: object
@@ -122,15 +115,6 @@ components:
         create_time:
           type: string
           format: date-time
-    ApplicationList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Application'
-        total_count:
-          type: integer
     ApplicationCreate:
       type: object
       required:
@@ -142,6 +126,22 @@ components:
           type: boolean
         is_telemetry_agent_active:
           type: boolean
+    ApplicationList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+        total_count:
+          type: integer
+  parameters:
+    AppName:
+      name: app_name
+      in: path
+      required: true
+      schema:
+        type: string
   securitySchemes:
     AuthToken:
       type: apiKey

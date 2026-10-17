@@ -74,21 +74,6 @@ paths:
           description: OK
 components:
   schemas:
-    Session:
-      type: object
-      properties:
-        session_id:
-          type: string
-        status:
-          type: string
-        ready:
-          type: boolean
-        linked:
-          type: boolean
-        deployment_request_id:
-          type: string
-        user_count:
-          type: integer
     SessionCreate:
       type: object
       required:
@@ -107,6 +92,21 @@ components:
             type: string
         webhook_url:
           type: string
+    Session:
+      type: object
+      properties:
+        session_id:
+          type: string
+        status:
+          type: string
+        ready:
+          type: boolean
+        linked:
+          type: boolean
+        deployment_request_id:
+          type: string
+        user_count:
+          type: integer
   parameters:
     SessionId:
       name: session_id
