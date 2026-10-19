@@ -46,30 +46,6 @@ created: '2026-07-01'
 modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
-- aid: edgegap:edgegap-app-versions-api
-  name: Edgegap App Versions API
-  description: Manage container image versions for an application.
-  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
-  baseURL: https://api.edgegap.com
-  tags:
-  - App Versions
-  properties:
-  - type: OpenAPI
-    url: openapi/edgegap-app-versions-api-openapi.yml
-  - type: Documentation
-    url: https://docs.edgegap.com/docs/api/dedicated-servers
-  - type: Documentation
-    url: https://docs.edgegap.com/docs/api/versioning
-  - type: Documentation
-    url: https://docs.edgegap.com/learn/orchestration/deployments
-  - type: Documentation
-    url: https://docs.edgegap.com/docs/session
-  - type: Documentation
-    url: https://docs.edgegap.com/learn/api/matchmaking
-  - type: Documentation
-    url: https://docs.edgegap.com/docs/api/relays
-  - type: Documentation
-    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
 - aid: edgegap:edgegap-applications-api
   name: Edgegap Applications API
   description: Manage applications registered on Edgegap.
@@ -148,30 +124,6 @@ apis:
     url: https://docs.edgegap.com/docs/api/relays
   - type: Documentation
     url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
-- aid: edgegap:edgegap-matchmaking-api
-  name: Edgegap Matchmaking API
-  description: Create and poll matchmaking tickets.
-  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
-  baseURL: https://api.edgegap.com
-  tags:
-  - Matchmaking
-  properties:
-  - type: OpenAPI
-    url: openapi/edgegap-matchmaking-api-openapi.yml
-  - type: Documentation
-    url: https://docs.edgegap.com/docs/api/dedicated-servers
-  - type: Documentation
-    url: https://docs.edgegap.com/docs/api/versioning
-  - type: Documentation
-    url: https://docs.edgegap.com/learn/orchestration/deployments
-  - type: Documentation
-    url: https://docs.edgegap.com/docs/session
-  - type: Documentation
-    url: https://docs.edgegap.com/learn/api/matchmaking
-  - type: Documentation
-    url: https://docs.edgegap.com/docs/api/relays
-  - type: Documentation
-    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
 - aid: edgegap:edgegap-metrics-api
   name: Edgegap Metrics API
   description: Monitoring and telemetry for deployments.
@@ -232,6 +184,154 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/edgegap-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-container-registry-api
+  name: Edgegap Container Registry API
+  description: Container Registry API
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Container Registry
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-container-registry-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-deployment-tags-api
+  name: Edgegap Deployment Tags API
+  description: Deployment Tags API - Deployment Tags related operations.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Deployment Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-deployment-tags-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-endpoint-storage-api
+  name: Edgegap Endpoint Storage API
+  description: >-
+    Endpoint Storage Control API - Please refer to <a href='https://docs.edgegap.com/docs/deployment/endpoint-storage'
+    target='_blank'>this documentation</a> to get started with storage.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Endpoint Storage
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-endpoint-storage-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-ip-lookup-api
+  name: Edgegap IP Lookup API
+  description: IP API - IP addresses related operations.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - IP Lookup
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-ip-lookup-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-locations-api
+  name: Edgegap Locations API
+  description: >-
+    Locations API - Please refer to <a href='https://docs.edgegap.com/docs/deployment/locations/beacons'
+    target='_blank'>this documentation</a> to get started with locations beacons.
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Locations
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-locations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/dedicated-servers
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/versioning
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/orchestration/deployments
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/session
+  - type: Documentation
+    url: https://docs.edgegap.com/learn/api/matchmaking
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/api/relays
+  - type: Documentation
+    url: https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy
+- aid: edgegap:edgegap-report-deployment-api
+  name: Edgegap Report Deployment API
+  description: API to report one of your game server
+  humanURL: https://docs.edgegap.com/docs/api/dedicated-servers
+  baseURL: https://api.edgegap.com
+  tags:
+  - Report Deployment
+  properties:
+  - type: OpenAPI
+    url: openapi/edgegap-report-deployment-api-openapi.yml
   - type: Documentation
     url: https://docs.edgegap.com/docs/api/dedicated-servers
   - type: Documentation

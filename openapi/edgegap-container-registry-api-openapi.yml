@@ -1,0 +1,390 @@
+openapi: 3.2.0
+info:
+  title: Edgegap V1 Container Registry API
+  version: 0.0.0
+  description: 'Introduction
+
+
+    The Edgegap API lets you manage all your resources from standard HTTP requests. We promote using them to automate all your processes that are using Edgegap.
+
+
+    If you have any questions, don''t hesitate to contact us via email, or you can also jump on our Discord. We will be happy to help. Feel free to make features request; we also love those.
+
+
+    Pagination - Response​
+
+
+    The GET response body can be returned with pagination to avoid requesting all the data at once.
+
+
+    Pagination object will always be under the paginator key.
+
+
+    {
+
+    "number": "The Current page, default=1",
+
+    "next_page_number": "The Next page number or null",
+
+    "previous_page_number": "The Previous page number or null",
+
+    "paginator": {
+
+    "num_pages": "The total numbers of pages"
+
+    },
+
+    "has_next": "Boolean if there is a next page",
+
+    "has_previous": "Boolean if there is a previous page"
+
+    }
+
+
+    Full Body Example:
+
+
+    {
+
+    "count": 100,
+
+    "data": ["value-0", "[...]", "value-9"],
+
+    "success": true,
+
+    "pagination": {
+
+    "number": 1,
+
+    "next_page_number": 2,
+
+    "previous_page_number": null,
+
+    "paginator": {
+
+    "num_pages": 10
+
+    },
+
+    "has_next": true,
+
+    "has_previous": false
+
+    }
+
+    }
+
+
+    Pagination - Parameters​
+
+
+    You can add those values to manipulate the pagination object in the URL Parameters.
+
+
+    page
+
+
+    limit
+
+
+    Example:
+
+
+    # To get the second page
+
+    GET - https://api.edgegap.com/v1/apps?page=2
+
+
+    # To change the count of element in one page (20/page)
+
+    GET - https://api.edgegap.com/v1/apps?limit=20
+
+
+    # You can mix those (20/page, second page)
+
+    GET - https://api.edgegap.com/v1/apps?page=2&limit=20'
+  termsOfService: https://console.edgegap.com/terms-of-service
+  contact:
+    name: Email
+    email: info@edgegap.com
+    url: https://edgegap.com
+servers:
+- url: https://api.edgegap.com
+security:
+- apiKey: []
+tags:
+- name: Container Registry
+  description: Container Registry API
+paths:
+  /v1/container-registry/images/{image_name}/tags:
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageTagList'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: List All Tags for a Registry Image
+      description: List all tags of a specific registry image.
+      operationId: registry-image-tag-list
+      parameters:
+      - name: image_name
+        in: path
+        required: true
+        description: The name of the image
+        schema:
+          type: string
+      tags:
+      - Container Registry
+  /v1/container-registry/images/{image_name}/tags/bulk-delete:
+    post:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '207':
+          description: Multi-Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api-model-bulkdeletetagsresponse'
+      summary: Bulk Delete Tags For a Registry Image
+      description: Delete multiple tags for a registry image in a single request. Returns 207 Multi-Status with per-tag results.
+      operationId: image-tag-bulk-delete
+      parameters:
+      - name: image_name
+        in: path
+        required: true
+        description: The name of the image
+        schema:
+          type: string
+      tags:
+      - Container Registry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api-model-bulkdeletetagsrequest'
+        required: true
+  /v1/container-registry/images/{image_name}/tags/{tag_name}:
+    delete:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api-model-registryartifacttagdeleteresponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Delete Tag For a Registry Image
+      description: Delete a single tag from a artifact in the registry.
+      operationId: image-tag-delete
+      parameters:
+      - name: image_name
+        in: path
+        required: true
+        description: The name of the image
+        schema:
+          type: string
+      - name: tag_name
+        in: path
+        required: true
+        description: The name of the tag
+        schema:
+          type: string
+      tags:
+      - Container Registry
+components:
+  schemas:
+    ArtifactPayload:
+      required:
+      - artifact_deleted
+      - image_hash
+      - remaining_tags
+      - size_mb
+      properties:
+        artifact_deleted:
+          type: boolean
+          description: Whether the Artifact is deleted
+        remaining_tags:
+          type: array
+          description: The List of Tags associated with this Artifact
+          example:
+          - tag1
+          - tag2
+          items:
+            type: string
+        image_hash:
+          type: string
+          description: The Hash of the Image
+          example: sha256:1234567890abcdef
+        size_mb:
+          type: number
+          description: The Size of the Image in MB
+      type: object
+    ImageTagPayload:
+      required:
+      - artifact
+      - last_push_at
+      - tag
+      properties:
+        tag:
+          type: string
+          description: The Image Tag
+          example: tag1
+        last_push_at:
+          type: string
+          format: date-time
+          description: The Last Push Time
+        artifact:
+          description: The Artifact which this tag is linked to
+          allOf:
+          - $ref: '#/components/schemas/ArtifactPayload'
+      type: object
+    api-model-bulkdeletetagresult:
+      properties:
+        tag:
+          type: string
+          description: Auto Generated Field for tag
+        status:
+          type: integer
+          description: Auto Generated Field for status
+        message:
+          type: string
+          description: Auto Generated Field for message
+      type: object
+    api-model-bulkdeletetagsresponse:
+      properties:
+        results:
+          type: array
+          description: Auto Generated Field for results
+          items:
+            $ref: '#/components/schemas/api-model-bulkdeletetagresult'
+        summary:
+          $ref: '#/components/schemas/api-model-bulkdeletetagssummary'
+      type: object
+    api-model-bulkdeletetagssummary:
+      properties:
+        total:
+          type: integer
+          description: Auto Generated Field for total
+        success:
+          type: integer
+          description: Auto Generated Field for success
+        failed:
+          type: integer
+          description: Auto Generated Field for failed
+      type: object
+    api-model-bulkdeletetagsrequest:
+      properties:
+        tags:
+          type: array
+          description: Auto Generated Field for tags
+          items:
+            type: string
+            description: Auto Generated Field for tags
+      type: object
+    api-model-registryartifacttagdeleteresponse:
+      properties:
+        artifact:
+          $ref: '#/components/schemas/api-model-tagdeleteartifact'
+        deleted_tag:
+          type: string
+          description: Auto Generated Field for deleted_tag
+      type: object
+    api-model-tagdeleteartifact:
+      properties:
+        artifact_deleted:
+          type: boolean
+          description: Auto Generated Field for artifact_deleted
+        size_mb:
+          type: number
+          description: Auto Generated Field for size_mb
+        remaining_tags:
+          type: array
+          description: Auto Generated Field for remaining_tags
+          items:
+            type: string
+            description: Auto Generated Field for remaining_tags
+        image_hash:
+          type: string
+          description: Auto Generated Field for image_hash
+      type: object
+    Error:
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: A message depending of the request termination
+      type: object
+    ImageTagList:
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageTagPayload'
+      type: object
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: authorization
+      description: 'To access Edgegap API, generate (and view) your secret tokens in Dashboard - User Settings / Tokens. Add your secret token with each API request as an HTTP header (include the word token): `Authorization: token xxxxxxxx-e458-4592-b607-c2c28afd8b62`'

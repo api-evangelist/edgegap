@@ -1,122 +1,1099 @@
 openapi: 3.2.0
 info:
-  title: Edgegap Arbitrium Sessions API
-  description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
-  termsOfService: https://edgegap.com/terms-of-service/
+  title: Edgegap V1 Sessions API
+  version: 0.0.0
+  description: 'Introduction
+
+
+    The Edgegap API lets you manage all your resources from standard HTTP requests. We promote using them to automate all your processes that are using Edgegap.
+
+
+    If you have any questions, don''t hesitate to contact us via email, or you can also jump on our Discord. We will be happy to help. Feel free to make features request; we also love those.
+
+
+    Pagination - Response​
+
+
+    The GET response body can be returned with pagination to avoid requesting all the data at once.
+
+
+    Pagination object will always be under the paginator key.
+
+
+    {
+
+    "number": "The Current page, default=1",
+
+    "next_page_number": "The Next page number or null",
+
+    "previous_page_number": "The Previous page number or null",
+
+    "paginator": {
+
+    "num_pages": "The total numbers of pages"
+
+    },
+
+    "has_next": "Boolean if there is a next page",
+
+    "has_previous": "Boolean if there is a previous page"
+
+    }
+
+
+    Full Body Example:
+
+
+    {
+
+    "count": 100,
+
+    "data": ["value-0", "[...]", "value-9"],
+
+    "success": true,
+
+    "pagination": {
+
+    "number": 1,
+
+    "next_page_number": 2,
+
+    "previous_page_number": null,
+
+    "paginator": {
+
+    "num_pages": 10
+
+    },
+
+    "has_next": true,
+
+    "has_previous": false
+
+    }
+
+    }
+
+
+    Pagination - Parameters​
+
+
+    You can add those values to manipulate the pagination object in the URL Parameters.
+
+
+    page
+
+
+    limit
+
+
+    Example:
+
+
+    # To get the second page
+
+    GET - https://api.edgegap.com/v1/apps?page=2
+
+
+    # To change the count of element in one page (20/page)
+
+    GET - https://api.edgegap.com/v1/apps?limit=20
+
+
+    # You can mix those (20/page, second page)
+
+    GET - https://api.edgegap.com/v1/apps?page=2&limit=20'
+  termsOfService: https://console.edgegap.com/terms-of-service
   contact:
-    name: Edgegap Support
-    url: https://edgegap.com/contact/
-  version: '1.0'
+    name: Email
+    email: info@edgegap.com
+    url: https://edgegap.com
 servers:
 - url: https://api.edgegap.com
-  description: Edgegap Arbitrium Management API
 security:
-- AuthToken: []
+- apiKey: []
 tags:
 - name: Sessions
-  description: Add and remove players or groups on a running deployment.
+  description: Sessions Control API - Please refer to this documentation to get started with sessions.
 paths:
   /v1/session:
     post:
-      operationId: createSession
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionRequest'
+      summary: Create a Session
+      description: Create a session with users. Sessions are linked to a deployment.
+      operationId: session-post
       tags:
       - Sessions
-      summary: Create session
-      description: Creates a session with users, linked to a deployment.
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SessionCreate'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Session'
+              $ref: '#/components/schemas/SessionModel'
+        required: true
   /v1/session/{session_id}:
-    get:
-      operationId: getSession
-      tags:
-      - Sessions
-      summary: Get session
-      parameters:
-      - $ref: '#/components/parameters/SessionId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Session'
-    delete:
-      operationId: deleteSession
-      tags:
-      - Sessions
-      summary: Delete session
-      parameters:
-      - $ref: '#/components/parameters/SessionId'
-      responses:
-        '200':
-          description: OK
-  /v1/session/{session_id}/users:
-    get:
-      operationId: listSessionUsers
-      tags:
-      - Sessions
-      summary: List session users
-      parameters:
-      - $ref: '#/components/parameters/SessionId'
-      responses:
-        '200':
-          description: OK
-components:
-  schemas:
-    SessionCreate:
-      type: object
-      required:
-      - app_name
-      - version_name
-      properties:
-        app_name:
-          type: string
-        version_name:
-          type: string
-        deployment_request_id:
-          type: string
-        ip_list:
-          type: array
-          items:
-            type: string
-        webhook_url:
-          type: string
-    Session:
-      type: object
-      properties:
-        session_id:
-          type: string
-        status:
-          type: string
-        ready:
-          type: boolean
-        linked:
-          type: boolean
-        deployment_request_id:
-          type: string
-        user_count:
-          type: integer
-  parameters:
-    SessionId:
-      name: session_id
+    parameters:
+    - name: session_id
       in: path
       required: true
       schema:
         type: string
+    get:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionGet'
+      summary: Get a Session
+      description: Retrieve the information for a session.
+      operationId: get-session
+      tags:
+      - Sessions
+    delete:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '410':
+          description: Instance Already terminated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionDelete'
+      summary: Delete a Session
+      description: Delete a session. Once deleted, a session is no more accessible and does not have a history. The deployment associated will not be deleted.
+      operationId: session-delete
+      tags:
+      - Sessions
+  /v1/session/{session_id}/users:
+    parameters:
+    - name: session_id
+      in: path
+      required: true
+      schema:
+        type: string
+    put:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionUserContext'
+      summary: Put Users in a Session
+      description: Add specified users to a session.
+      operationId: put-users-session
+      tags:
+      - Sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchSessionModel'
+        required: true
+    get:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionUserContext'
+      summary: List Users of a Session
+      description: List all the users of session.
+      operationId: get-users-session
+      tags:
+      - Sessions
+    delete:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionUserContext'
+      summary: Delete Users From a Session
+      description: Remove specified users from a session.
+      operationId: delete-users-session
+      tags:
+      - Sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchSessionModel'
+        required: true
+  /v1/sessions:
+    get:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sessions'
+      summary: List All Sessions
+      description: List all the active sessions.
+      operationId: list-sessions
+      tags:
+      - Sessions
+  /v1/sessions/bulk-stop:
+    post:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionBulkStopResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Delete Sessions in Bulk
+      description: Make a bulk delete of sessions using filters. All the sessions matching the given filters will be permanently deleted.
+      operationId: sessions-bulk-stop
+      tags:
+      - Sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionBulkStopPayload'
+        required: true
+components:
+  schemas:
+    SessionUser:
+      required:
+      - ip
+      properties:
+        ip:
+          type: string
+          description: Ip of the user connected to the Session
+          example: 1.2.3.4
+        latitude:
+          type: number
+          description: Latitude
+        longitude:
+          type: number
+          description: Longitude
+      type: object
+    SessionContext:
+      required:
+      - kind
+      - linked
+      - ready
+      - session_id
+      - status
+      - user_count
+      properties:
+        session_id:
+          type: string
+          description: Unique UUID
+          example: abc123-s
+        custom_id:
+          type: string
+          description: Custom ID if Available
+          example: custom-abc123
+        status:
+          type: string
+          description: Current status of the session
+          example: Status.READY
+        ready:
+          type: boolean
+          description: If the session is linked to a Ready deployment
+          example: true
+        linked:
+          type: boolean
+          description: If the session is linked to a deployment
+          example: true
+        kind:
+          type: string
+          description: Type of session created
+          example: DEFAULT | SEATS | MATCH
+        user_count:
+          type: integer
+          description: Count of user this session currently have
+          example: '10'
+        deployment_request_id:
+          type: string
+          description: Unique UUID
+          example: abc123
+        webhook_url:
+          type: string
+          description: 'When your Session is Linked, Unprocessable or in Error, we will POST the session''s details on the webhook_url '
+          example: https://webhook.com
+      type: object
+    SelectorModel:
+      required:
+      - tag
+      properties:
+        tag:
+          type: string
+          description: The Tag to filter potential Deployment with this Selector
+          example: tag
+          minLength: 1
+          maxLength: 40
+        tag_only:
+          type: boolean
+          description: If True, will not try to filter Deployment and only tag the Session
+          default: false
+        env:
+          description: Environment Variable to inject in new Deployment created by App Version with auto-deploy
+          allOf:
+          - $ref: '#/components/schemas/SelectorEnvModel'
+      type: object
+    SessionGet:
+      required:
+      - app_version
+      - create_time
+      - elapsed
+      - kind
+      - linked
+      - ready
+      - session_id
+      - status
+      - user_count
+      properties:
+        session_id:
+          type: string
+          description: Unique UUID
+          example: abc123-s
+        custom_id:
+          type: string
+          description: Custom ID if Available
+          example: custom-abc123
+        status:
+          type: string
+          description: Current status of the session
+          example: Ready
+        ready:
+          type: boolean
+          description: If the session is linked to a ready deployment
+          example: true
+        linked:
+          type: boolean
+          description: If the session is linked to a deployment
+          example: true
+        kind:
+          type: string
+          description: Type of session created
+          example: Seat
+        user_count:
+          type: integer
+          description: Count of user this session currently have
+          example: '10'
+        app_version:
+          type: integer
+          description: App version linked to the session
+        create_time:
+          type: string
+          description: Session created at
+          example: '2026-10-19 20:00:37.815706'
+        elapsed:
+          type: integer
+          description: Elapsed time
+        error:
+          type: string
+          description: Error Detail
+        session_users:
+          type: array
+          description: Users in the session
+          items:
+            $ref: '#/components/schemas/SessionUser'
+        session_ips:
+          type: array
+          description: IPS in the session
+          items:
+            $ref: '#/components/schemas/SessionUser'
+        deployment:
+          $ref: '#/components/schemas/Deployment'
+        webhook_url:
+          type: string
+          description: 'When your Session is Linked, Unprocessable or in Error, we will POST the session''s details on the webhook_url '
+          example: https://webhook.com
+      type: object
+    Deployment:
+      required:
+      - fqdn
+      - public_ip
+      - ready
+      - request_id
+      - status
+      - whitelisting_active
+      properties:
+        request_id:
+          type: string
+          description: Unique UUID
+          example: abc123
+        public_ip:
+          type: string
+          description: The public IP
+          example: 100.10.0.85
+        status:
+          type: string
+          description: Current status of Deployment
+          example: Status.READY
+        ready:
+          type: boolean
+          description: if the deployment is ready
+          example: true
+        whitelisting_active:
+          type: boolean
+          description: if the deployment ACL is active
+          example: true
+        fqdn:
+          type: string
+          description: ''
+          example: abc123.test.edgegap.com
+        ports:
+          type: object
+          example:
+            web:
+              external: 31587
+              internal: 8080
+              protocol: http
+              name: web
+              tls_upgrade: true
+              link: https://example.com:31587
+              proxy: 65001
+            '7777':
+              external: 31669
+              internal: 7777
+              protocol: UDP
+              name: '7777'
+              tls_upgrade: false
+              link: example.com:31669
+              proxy: 65002
+          additionalProperties:
+            $ref: '#/components/schemas/PortMapping'
+        location:
+          description: Location related information
+          $ref: '#/components/schemas/DeploymentLocation'
+        tags:
+          type: array
+          description: List of tags associated with the deployment
+          items:
+            type: string
+            example: production
+        sockets:
+          type: integer
+          description: The Capacity of the Deployment
+          example: '5'
+        sockets_usage:
+          type: integer
+          description: The Capacity Usage of the Deployment
+          example: '2'
+        is_joinable_by_session:
+          type: boolean
+          description: If the deployment is joinable by sessions
+      type: object
+    Pagination:
+      properties:
+        number:
+          type: integer
+          description: Current page number
+        next_page_number:
+          type: integer
+          description: Next page number
+        previous_page_number:
+          type: integer
+          description: Previous page number
+        paginator:
+          $ref: '#/components/schemas/Paginator'
+        has_next:
+          type: boolean
+          description: If there is a next page
+        has_previous:
+          type: boolean
+          description: If there is a previous page
+      type: object
+    LocationModel:
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Desired Latitude
+          example: 45.5
+        longitude:
+          type: number
+          description: Desired Longitude
+          example: -73.56
+      type: object
+    SessionRequest:
+      required:
+      - app
+      - session_id
+      - version
+      properties:
+        session_id:
+          type: string
+          description: The Unique Identifier of the Session
+          example: abc123-s
+        custom_id:
+          type: string
+          description: Custom ID if Available
+          example: custom-abc123
+        app:
+          type: string
+          description: The Name of the App you requested
+          example: demo
+        version:
+          type: string
+          description: The name of the App Version you requested
+          example: v1.0
+        deployment_request_id:
+          type: string
+          description: Unique UUID
+        selectors:
+          type: array
+          description: List of Selectors to filter potential Deployment to link and tag the Session
+          items:
+            $ref: '#/components/schemas/SelectorModel'
+        webhook_url:
+          type: string
+          description: 'When your Session is Linked, Unprocessable or in Error, we will POST the session''s details on the webhook_url '
+      type: object
+    PatchSessionModel:
+      required:
+      - ip_list
+      properties:
+        ip_list:
+          type: array
+          description: "The List of IP of your user, Array of String, example: \n\n\t [\"162.254.103.13\",\"198.12.116.39\", \"162.254.135.39\", \"162.254.129.34\"]"
+          items:
+            type: string
+            example: 1.2.3.4
+      type: object
+    Paginator:
+      properties:
+        num_pages:
+          type: integer
+          description: Total pages count
+      type: object
+    SessionFilterModel:
+      required:
+      - field
+      - filter_type
+      - values
+      properties:
+        field:
+          type: string
+          description: The field to filter
+          example: city
+        values:
+          type: array
+          description: The values to filter
+          example:
+          - Montreal
+          items:
+            type: string
+        filter_type:
+          type: string
+          description: The type of filter
+          example: any
+          enum:
+          - any
+          - all
+          - not
+      type: object
+    SessionBulkStopPayload:
+      required:
+      - filters
+      properties:
+        filters:
+          type: array
+          description: Filters used to match with sessions
+          items:
+            $ref: '#/components/schemas/SessionBulkStopFiltersPayload'
+      type: object
+    DeploymentLocation:
+      required:
+      - administrative_division
+      - city
+      - continent
+      - country
+      - latitude
+      - longitude
+      - timezone
+      properties:
+        city:
+          type: string
+          description: City of the deployment
+          example: Montreal
+        country:
+          type: string
+          description: Country of the deployment
+          example: Canada
+        continent:
+          type: string
+          description: Continent of the deployment
+          example: North America
+        administrative_division:
+          type: string
+          description: Administrative division of the deployment
+          example: Quebec
+        timezone:
+          type: string
+          description: Timezone of the deployment
+          example: Eastern Time
+        latitude:
+          type: number
+          description: Latitude of the deployment
+          example: 45.508888
+        longitude:
+          type: number
+          description: Longitude of the deployment
+          example: -73.561668
+      type: object
+    GeoIpListModel:
+      required:
+      - ip
+      - latitude
+      - longitude
+      properties:
+        ip:
+          type: string
+          description: IP address
+          example: 1.2.3.4
+        latitude:
+          type: number
+          description: Latitude of the IP/User
+        longitude:
+          type: number
+          description: Longitude of the IP/User
+      type: object
+    PortMapping:
+      properties:
+        external:
+          type: integer
+          description: The Port to Connect from Internet
+          minimum: 1
+          maximum: 65535
+        internal:
+          type: integer
+          description: The internal Port of the Container
+          minimum: 1
+          maximum: 65535
+        protocol:
+          type: string
+          description: The Protocol (i.e. 'TCP')
+        name:
+          type: string
+          description: The Name of the port if given, default to internal port in string
+        tls_upgrade:
+          type: boolean
+          description: If the port require TLS Upgrade
+        link:
+          type: string
+          description: link of the port with scheme depending of the protocol
+        proxy:
+          type: integer
+          description: Internal Proxy Mapping
+      type: object
+    SessionBulkStopFiltersPayload:
+      required:
+      - field
+      - filter_type
+      - values
+      properties:
+        field:
+          type: string
+          description: The field on which to apply the filter
+          example: session_id
+          enum:
+          - session_id
+          - deployment_tags
+          - request_id
+        values:
+          type: array
+          description: Values that will be used for the filter
+          example:
+          - session-1
+          - session-2
+          items:
+            type: string
+        filter_type:
+          type: string
+          description: 'Types of filter used. Possible values are: [''any'', ''all'', ''not'']'
+          example: any
+          enum:
+          - any
+          - all
+          - not
+      type: object
+    Error:
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: A message depending of the request termination
+      type: object
+    SelectorEnvModel:
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          description: The Key to inject in the Deployment Environment Variable for this Selector
+          example: KEY
+          minLength: 1
+          maxLength: 255
+        value:
+          type: string
+          description: The Value to inject in the Deployment Environment Variable for this Selector
+          example: VALUE
+          minLength: 1
+          maxLength: 1024
+      type: object
+    SessionModel:
+      required:
+      - app_name
+      properties:
+        app_name:
+          type: string
+          description: "The Name of the App you want to deploy, example: \n\n\tsupermario"
+          example: demo
+        version_name:
+          type: string
+          description: "The Name of the App Version you want to deploy, example: \n\n\tv1.0"
+          example: v1.0
+        ip_list:
+          type: array
+          description: "The List of IP of your user, Array of String, example: \n\n\t [\"162.254.103.13\",\"198.12.116.39\", \"162.254.135.39\", \"162.254.129.34\"]"
+          example:
+          - 1.1.1.1
+          items:
+            type: string
+            example: 1.2.3.4
+        geo_ip_list:
+          type: array
+          description: The list of IP of your user with their location (latitude, longitude)
+          items:
+            $ref: '#/components/schemas/GeoIpListModel'
+        deployment_request_id:
+          type: string
+          description: The request id of your deployment. If specified, the session will link to the deployment
+          example: c0653765de3b
+        location:
+          description: If you want to specify a centroid for your session.
+          $ref: '#/components/schemas/LocationModel'
+        city:
+          type: string
+          description: If you want your session in a specific city
+          example: Montreal
+        country:
+          type: string
+          description: If you want your session in a specific country
+          example: Canada
+        continent:
+          type: string
+          description: If you want your session in a specific continent
+          example: North America
+        administrative_division:
+          type: string
+          description: If you want your session in a specific administrative division
+          example: Quebec
+        region:
+          type: string
+          description: If you want your session in a specific region
+          example: North America
+        selectors:
+          type: array
+          description: List of Selectors to filter potential Deployment to link and tag the Session
+          items:
+            $ref: '#/components/schemas/SelectorModel'
+        webhook_url:
+          type: string
+          description: 'When your Session is Linked, Unprocessable or in Error, we will POST the session''s details on the webhook_url '
+          example: https://webhook.com
+        filters:
+          type: array
+          description: List of location filters to apply to the session
+          items:
+            $ref: '#/components/schemas/SessionFilterModel'
+        skip_telemetry:
+          type: boolean
+          description: If system should skip the telemetry and use GeoBase decision only
+      type: object
+    SessionBulkStopResponse:
+      required:
+      - processable
+      properties:
+        processable:
+          type: array
+          description: A list sessions that can be processed to be stopped
+          items:
+            $ref: '#/components/schemas/SessionStopResponse'
+      type: object
+    Sessions:
+      properties:
+        data:
+          type: array
+          description: List of Active Sessions
+          items:
+            $ref: '#/components/schemas/SessionContext'
+        total_count:
+          type: integer
+          description: Total Session in the Database
+        pagination:
+          description: Pagination Object
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    SessionDelete:
+      required:
+      - message
+      - session_id
+      properties:
+        message:
+          type: string
+          description: A message depending of the request termination
+          example: Instance 93924761ccde will be deleted
+        session_id:
+          type: string
+          description: The Unique Identifier of the Session
+          example: abc123-s
+        custom_id:
+          type: string
+          description: Custom ID if Available
+          example: custom-abc123
+      type: object
+    SessionUserContext:
+      required:
+      - session_users
+      properties:
+        session_users:
+          type: array
+          description: Users in the session
+          items:
+            $ref: '#/components/schemas/SessionUser'
+      type: object
+    SessionStopResponse:
+      required:
+      - session_id
+      properties:
+        session_id:
+          type: string
+          description: The id of the request for a deployment
+          example: session-1
+      type: object
   securitySchemes:
-    AuthToken:
+    apiKey:
       type: apiKey
       in: header
-      name: Authorization
-      description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent as `Authorization: token <your_token>`.'
+      name: authorization
+      description: 'To access Edgegap API, generate (and view) your secret tokens in Dashboard - User Settings / Tokens. Add your secret token with each API request as an HTTP header (include the word token): `Authorization: token xxxxxxxx-e458-4592-b607-c2c28afd8b62`'

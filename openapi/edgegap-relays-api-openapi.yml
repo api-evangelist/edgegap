@@ -1,156 +1,686 @@
 openapi: 3.2.0
 info:
-  title: Edgegap Arbitrium Relays API
-  description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
-  termsOfService: https://edgegap.com/terms-of-service/
+  title: Edgegap V1 Relays API
+  version: 0.0.0
+  description: 'Introduction
+
+
+    The Edgegap API lets you manage all your resources from standard HTTP requests. We promote using them to automate all your processes that are using Edgegap.
+
+
+    If you have any questions, don''t hesitate to contact us via email, or you can also jump on our Discord. We will be happy to help. Feel free to make features request; we also love those.
+
+
+    Pagination - Response​
+
+
+    The GET response body can be returned with pagination to avoid requesting all the data at once.
+
+
+    Pagination object will always be under the paginator key.
+
+
+    {
+
+    "number": "The Current page, default=1",
+
+    "next_page_number": "The Next page number or null",
+
+    "previous_page_number": "The Previous page number or null",
+
+    "paginator": {
+
+    "num_pages": "The total numbers of pages"
+
+    },
+
+    "has_next": "Boolean if there is a next page",
+
+    "has_previous": "Boolean if there is a previous page"
+
+    }
+
+
+    Full Body Example:
+
+
+    {
+
+    "count": 100,
+
+    "data": ["value-0", "[...]", "value-9"],
+
+    "success": true,
+
+    "pagination": {
+
+    "number": 1,
+
+    "next_page_number": 2,
+
+    "previous_page_number": null,
+
+    "paginator": {
+
+    "num_pages": 10
+
+    },
+
+    "has_next": true,
+
+    "has_previous": false
+
+    }
+
+    }
+
+
+    Pagination - Parameters​
+
+
+    You can add those values to manipulate the pagination object in the URL Parameters.
+
+
+    page
+
+
+    limit
+
+
+    Example:
+
+
+    # To get the second page
+
+    GET - https://api.edgegap.com/v1/apps?page=2
+
+
+    # To change the count of element in one page (20/page)
+
+    GET - https://api.edgegap.com/v1/apps?limit=20
+
+
+    # You can mix those (20/page, second page)
+
+    GET - https://api.edgegap.com/v1/apps?page=2&limit=20'
+  termsOfService: https://console.edgegap.com/terms-of-service
   contact:
-    name: Edgegap Support
-    url: https://edgegap.com/contact/
-  version: '1.0'
+    name: Email
+    email: info@edgegap.com
+    url: https://edgegap.com
 servers:
 - url: https://api.edgegap.com
-  description: Edgegap Arbitrium Management API
 security:
-- AuthToken: []
+- apiKey: []
 tags:
 - name: Relays
-  description: Distributed relay sessions and per-user authorization.
+  description: Handles Relay Sessions operations. Those operations are similar to Sessions but are simplified to be used with relays.
 paths:
   /v1/relays/sessions:
-    get:
-      operationId: listRelaySessions
-      tags:
-      - Relays
-      summary: List relay sessions
-      responses:
-        '200':
-          description: OK
     post:
-      operationId: createRelaySession
-      tags:
-      - Relays
-      summary: Create relay session
-      description: Creates a distributed relay session with users and an optional webhook_url.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RelaySessionCreate'
       responses:
         '200':
-          description: OK
+          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RelaySession'
+                $ref: '#/components/schemas/RelaySessionBaseResponse'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Create a Relay Session
+      description: Create a relay session with users.
+      operationId: relay-session-create
+      tags:
+      - Relays
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelaySessionCreatePayload'
+        required: true
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelaySessionListResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: List all Relay Sessions
+      description: List all the active relay sessions.
+      operationId: relay-session-list
+      tags:
+      - Relays
   /v1/relays/sessions/{session_id}:
-    get:
-      operationId: getRelaySession
-      tags:
-      - Relays
-      summary: Get relay session
-      parameters:
-      - $ref: '#/components/parameters/SessionId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RelaySession'
-    delete:
-      operationId: deleteRelaySession
-      tags:
-      - Relays
-      summary: Delete relay session
-      parameters:
-      - $ref: '#/components/parameters/SessionId'
-      responses:
-        '200':
-          description: OK
-  /v1/relays/sessions:authorize-user:
-    post:
-      operationId: authorizeRelayUser
-      tags:
-      - Relays
-      summary: Authorize relay user
-      description: Grants a user access to a relay session (requires session_id and user_ip).
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                session_id:
-                  type: string
-                user_ip:
-                  type: string
-      responses:
-        '200':
-          description: OK
-  /v1/relays/sessions:revoke-user:
-    post:
-      operationId: revokeRelayUser
-      tags:
-      - Relays
-      summary: Revoke relay user
-      description: Removes a user's access to a relay session.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                session_id:
-                  type: string
-                authorization_token:
-                  type: string
-      responses:
-        '200':
-          description: OK
-components:
-  schemas:
-    RelaySessionCreate:
-      type: object
-      properties:
-        webhook_url:
-          type: string
-        users:
-          type: array
-          items:
-            type: object
-            properties:
-              ip:
-                type: string
-    RelaySession:
-      type: object
-      properties:
-        session_id:
-          type: string
-        status:
-          type: string
-        relays:
-          type: array
-          items:
-            type: object
-            properties:
-              host:
-                type: string
-              port:
-                type: integer
-  parameters:
-    SessionId:
-      name: session_id
+    parameters:
+    - name: session_id
       in: path
       required: true
       schema:
         type: string
+    delete:
+      responses:
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+      summary: Delete a Relay Session
+      description: Delete a relay session.
+      operationId: relay-session-delete
+      tags:
+      - Relays
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelaySessionBaseResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Get a Relay Session
+      description: Retrieve the information for a relay session.
+      operationId: relay-session-get
+      tags:
+      - Relays
+  /v1/relays/sessions:authorize-user:
+    post:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelaySessionUserBaseResponse'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Authorize a user on a Relay Session
+      operationId: relay-user-authorize
+      tags:
+      - Relays
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelayUserAuthorizePayload'
+        required: true
+  /v1/relays/sessions:revoke-user:
+    post:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelaySessionBaseResponse'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+      summary: Remove a user on a Relay Session
+      description: Authorize a user on a Relay Session
+      operationId: relay-user-revoke
+      tags:
+      - Relays
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelayUserRevokePayload'
+        required: true
+components:
+  schemas:
+    RelayUserRevokePayload:
+      required:
+      - authorization_token
+      - session_id
+      properties:
+        session_id:
+          type: string
+          description: 'Session Request ID (ex: 0724828881e2-S)'
+          example: 0724828881e2-S
+        authorization_token:
+          type: integer
+          description: Relay Authorization Token
+          example: 3500589645
+      type: object
+    RelaySessionCreatePayload:
+      required:
+      - users
+      properties:
+        users:
+          type: array
+          description: List of IP Addresses of session users
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/RelaySessionUser'
+        filters:
+          type: array
+          description: List of location filters to apply to the session
+          items:
+            $ref: '#/components/schemas/RelayFilterModel'
+        webhook_url:
+          type: string
+          description: URL to send the session data to
+          example: https://my-webhook.com/dump
+      type: object
+    Paginator:
+      properties:
+        num_pages:
+          type: integer
+          description: Total pages count
+      type: object
+    ClientRelayPort:
+      properties:
+        port:
+          type: integer
+          description: The port number
+          example: 32001
+        protocol:
+          type: string
+          description: The protocol of the port
+          example: UDP
+        link:
+          type: string
+          description: The link to the port
+          example: 7349356945f1.st.edgegap.net:32001
+      type: object
+    RelaySessionUser:
+      required:
+      - ip
+      properties:
+        ip:
+          type: string
+          description: IP Address of session user
+          example: 1.1.1.1
+      type: object
+      additionalProperties: false
+    RelayUserAuthorizePayload:
+      required:
+      - session_id
+      - user_ip
+      properties:
+        session_id:
+          type: string
+          description: 'Session Request ID (ex: 0724828881e2-S)'
+          example: 0724828881e2-S
+        user_ip:
+          type: string
+          description: User Ip to Authorize
+          example: 1.1.1.1
+      type: object
+    Pagination:
+      properties:
+        number:
+          type: integer
+          description: Current page number
+        next_page_number:
+          type: integer
+          description: Next page number
+        previous_page_number:
+          type: integer
+          description: Previous page number
+        paginator:
+          $ref: '#/components/schemas/Paginator'
+        has_next:
+          type: boolean
+          description: If there is a next page
+        has_previous:
+          type: boolean
+          description: If there is a previous page
+      type: object
+    RelaySessionUserResponse:
+      properties:
+        ip_address:
+          type: string
+          description: The IP Address of the user
+          example: 1.1.1.1
+        latitude:
+          type: number
+          description: The latitude of the user
+          example: 45.5088
+        longitude:
+          type: number
+          description: The longitude of the user
+          example: -73.5878
+        authorization_token:
+          type: integer
+          description: The authorization token of the user
+          example: 21986334
+      type: object
+    RelaySessionBaseResponse:
+      required:
+      - linked
+      - ready
+      - session_id
+      - status
+      properties:
+        session_id:
+          type: string
+          description: The session ID
+          example: 7349356945f1-S
+        authorization_token:
+          type: integer
+          description: The authorization token for the session
+          example: 3500589645
+        status:
+          type: string
+          description: The status of the session
+          example: READY
+        ready:
+          type: boolean
+          description: If the session is ready to be used
+        linked:
+          type: boolean
+          description: If the session is linked to a relay
+        error:
+          type: string
+          description: The error message if the session failed
+          example: Session failed
+        session_users:
+          type: array
+          description: List Session Users
+          items:
+            $ref: '#/components/schemas/RelaySessionUserResponse'
+        relay:
+          description: The relay details the session is linked to
+          allOf:
+          - $ref: '#/components/schemas/RelayResponse'
+        webhook_url:
+          type: string
+          description: The webhook URL that we will call once the session is ready
+          example: https://my-webhook.com/dump
+      type: object
+    RelaySessionUserBaseResponse:
+      required:
+      - linked
+      - ready
+      - session_id
+      - status
+      properties:
+        session_id:
+          type: string
+          description: The session ID
+          example: 7349356945f1-S
+        authorization_token:
+          type: integer
+          description: The authorization token for the session
+          example: 3500589645
+        status:
+          type: string
+          description: The status of the session
+          example: READY
+        ready:
+          type: boolean
+          description: If the session is ready to be used
+        linked:
+          type: boolean
+          description: If the session is linked to a relay
+        error:
+          type: string
+          description: The error message if the session failed
+          example: Session failed
+        session_user:
+          description: List Session Users
+          allOf:
+          - $ref: '#/components/schemas/RelaySessionUserResponse'
+        relay:
+          description: The relay details the session is linked to
+          allOf:
+          - $ref: '#/components/schemas/RelayResponse'
+        webhook_url:
+          type: string
+          description: The webhook URL that we will call once the session is ready
+          example: https://my-webhook.com/dump
+      type: object
+    RelayFilterModel:
+      required:
+      - field
+      - filter_type
+      - values
+      properties:
+        field:
+          type: string
+          description: The field to filter
+          example: location
+        values:
+          type: array
+          description: The values to filter
+          example:
+          - US
+          items:
+            type: string
+        filter_type:
+          type: string
+          description: The type of filter
+          example: any
+          enum:
+          - any
+          - all
+          - not
+      type: object
+    MappedPortResponse:
+      properties:
+        server:
+          $ref: '#/components/schemas/ServerRelayPort'
+        client:
+          $ref: '#/components/schemas/ClientRelayPort'
+      type: object
+    RelaySessionListResponse:
+      properties:
+        sessions:
+          type: array
+          description: List of relay sessions
+          items:
+            $ref: '#/components/schemas/RelaySessionBaseResponse'
+        pagination:
+          description: Pagination Object
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    Error:
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: A message depending of the request termination
+      type: object
+    RelayResponse:
+      properties:
+        ip:
+          type: string
+          description: The IP Address of the relay
+          example: 2.2.2.2
+        host:
+          type: string
+          description: The host of the relay
+          example: 7349356945f1.st.edgegap.net
+        ports:
+          $ref: '#/components/schemas/MappedPortResponse'
+      type: object
+    ServerRelayPort:
+      properties:
+        port:
+          type: integer
+          description: The port number
+          example: 32000
+        protocol:
+          type: string
+          description: The protocol of the port
+          example: UDP
+        link:
+          type: string
+          description: The link to the port
+          example: 7349356945f1.st.edgegap.net:32000
+      type: object
   securitySchemes:
-    AuthToken:
+    apiKey:
       type: apiKey
       in: header
-      name: Authorization
-      description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent as `Authorization: token <your_token>`.'
+      name: authorization
+      description: 'To access Edgegap API, generate (and view) your secret tokens in Dashboard - User Settings / Tokens. Add your secret token with each API request as an HTTP header (include the word token): `Authorization: token xxxxxxxx-e458-4592-b607-c2c28afd8b62`'

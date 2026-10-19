@@ -1,44 +1,257 @@
 openapi: 3.2.0
 info:
-  title: Edgegap Arbitrium Metrics API
-  description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
-  termsOfService: https://edgegap.com/terms-of-service/
+  title: Edgegap V1 Metrics API
+  version: 0.0.0
+  description: 'Introduction
+
+
+    The Edgegap API lets you manage all your resources from standard HTTP requests. We promote using them to automate all your processes that are using Edgegap.
+
+
+    If you have any questions, don''t hesitate to contact us via email, or you can also jump on our Discord. We will be happy to help. Feel free to make features request; we also love those.
+
+
+    Pagination - Response​
+
+
+    The GET response body can be returned with pagination to avoid requesting all the data at once.
+
+
+    Pagination object will always be under the paginator key.
+
+
+    {
+
+    "number": "The Current page, default=1",
+
+    "next_page_number": "The Next page number or null",
+
+    "previous_page_number": "The Previous page number or null",
+
+    "paginator": {
+
+    "num_pages": "The total numbers of pages"
+
+    },
+
+    "has_next": "Boolean if there is a next page",
+
+    "has_previous": "Boolean if there is a previous page"
+
+    }
+
+
+    Full Body Example:
+
+
+    {
+
+    "count": 100,
+
+    "data": ["value-0", "[...]", "value-9"],
+
+    "success": true,
+
+    "pagination": {
+
+    "number": 1,
+
+    "next_page_number": 2,
+
+    "previous_page_number": null,
+
+    "paginator": {
+
+    "num_pages": 10
+
+    },
+
+    "has_next": true,
+
+    "has_previous": false
+
+    }
+
+    }
+
+
+    Pagination - Parameters​
+
+
+    You can add those values to manipulate the pagination object in the URL Parameters.
+
+
+    page
+
+
+    limit
+
+
+    Example:
+
+
+    # To get the second page
+
+    GET - https://api.edgegap.com/v1/apps?page=2
+
+
+    # To change the count of element in one page (20/page)
+
+    GET - https://api.edgegap.com/v1/apps?limit=20
+
+
+    # You can mix those (20/page, second page)
+
+    GET - https://api.edgegap.com/v1/apps?page=2&limit=20'
+  termsOfService: https://console.edgegap.com/terms-of-service
   contact:
-    name: Edgegap Support
-    url: https://edgegap.com/contact/
-  version: '1.0'
+    name: Email
+    email: info@edgegap.com
+    url: https://edgegap.com
 servers:
 - url: https://api.edgegap.com
-  description: Edgegap Arbitrium Management API
 security:
-- AuthToken: []
+- apiKey: []
 tags:
 - name: Metrics
-  description: Monitoring and telemetry for deployments.
+  description: Metrics API - Please refer to this documentation to get started with your deployment metrics.
 paths:
-  /v1/metrics/deployment/{deployment_id}:
-    get:
-      operationId: getDeploymentMetrics
-      tags:
-      - Metrics
-      summary: Get deployment metrics
-      description: Returns monitoring telemetry (CPU, memory, network) for a deployment.
-      parameters:
-      - $ref: '#/components/parameters/DeploymentId'
-      responses:
-        '200':
-          description: OK
-components:
-  parameters:
-    DeploymentId:
-      name: deployment_id
+  /v1/metrics/deployment/{request_id}:
+    parameters:
+    - name: request_id
       in: path
       required: true
       schema:
         type: string
+    get:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsResponse'
+      summary: Get a Deployment Metrics
+      description: Get the metrics for a specific deployment based on the ```start_time```, ```end_time``` and ```steps```. ```raw``` parameter can be set to true to get the raw data.
+      operationId: deployment-metrics-get
+      parameters:
+      - description: "Starting time for the query. Default to deployment start time. Should match %Y-%m-%d %H:%M:%S.%f\n\n\t\tExample: 2021-07-10 00:00:00.00"
+        name: start_time
+        in: query
+        schema:
+          type: string
+      - description: "End time for the metrics. Default to now.Must be greater than start_time. Should match %Y-%m-%d %H:%M:%S.%f\n\n\t\tExample: 2021-07-19 00:00:00.00"
+        name: end_time
+        in: query
+        schema:
+          type: string
+      - description: "Steps between each metrics.\n\n\t\tExample: 30s, 1m, 5m 10m, 1h "
+        name: steps
+        in: query
+        schema:
+          type: string
+      - description: If set to true, will return the raw data. Default to false.
+        name: raw
+        in: query
+        schema:
+          type: string
+      tags:
+      - Metrics
+components:
+  schemas:
+    MetricsResponse:
+      properties:
+        total:
+          $ref: '#/components/schemas/TotalMetricsModel'
+        cpu:
+          $ref: '#/components/schemas/MetricsModel'
+        cpu_throttle_rate:
+          $ref: '#/components/schemas/MetricsModel'
+        cpu_throttle_total:
+          $ref: '#/components/schemas/MetricsModel'
+        mem:
+          $ref: '#/components/schemas/MetricsModel'
+        network:
+          $ref: '#/components/schemas/NetworkMetricsModel'
+      type: object
+    MetricsModel:
+      properties:
+        labels:
+          type: array
+          items:
+            type: string
+            example: 00:00:00
+        datasets:
+          type: array
+          items:
+            type: number
+            example: '2458'
+        timestamps:
+          type: array
+          items:
+            type: string
+            format: date
+            example: '2021-07-14 14:17:37.711'
+      type: object
+    NetworkMetricsModel:
+      properties:
+        receive:
+          $ref: '#/components/schemas/MetricsModel'
+        transmit:
+          $ref: '#/components/schemas/MetricsModel'
+      type: object
+    TotalMetricsModel:
+      properties:
+        receive_total:
+          $ref: '#/components/schemas/MetricsModel'
+        transmit_total:
+          $ref: '#/components/schemas/MetricsModel'
+        disk_read_total:
+          $ref: '#/components/schemas/MetricsModel'
+        disk_write_total:
+          $ref: '#/components/schemas/MetricsModel'
+      type: object
+    Error:
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: A message depending of the request termination
+      type: object
   securitySchemes:
-    AuthToken:
+    apiKey:
       type: apiKey
       in: header
-      name: Authorization
-      description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent as `Authorization: token <your_token>`.'
+      name: authorization
+      description: 'To access Edgegap API, generate (and view) your secret tokens in Dashboard - User Settings / Tokens. Add your secret token with each API request as an HTTP header (include the word token): `Authorization: token xxxxxxxx-e458-4592-b607-c2c28afd8b62`'

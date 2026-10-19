@@ -1,150 +1,1191 @@
 openapi: 3.2.0
 info:
-  title: Edgegap Arbitrium Applications API
-  description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
-  termsOfService: https://edgegap.com/terms-of-service/
+  title: Edgegap V1 Applications API
+  version: 0.0.0
+  description: 'Introduction
+
+
+    The Edgegap API lets you manage all your resources from standard HTTP requests. We promote using them to automate all your processes that are using Edgegap.
+
+
+    If you have any questions, don''t hesitate to contact us via email, or you can also jump on our Discord. We will be happy to help. Feel free to make features request; we also love those.
+
+
+    Pagination - Response​
+
+
+    The GET response body can be returned with pagination to avoid requesting all the data at once.
+
+
+    Pagination object will always be under the paginator key.
+
+
+    {
+
+    "number": "The Current page, default=1",
+
+    "next_page_number": "The Next page number or null",
+
+    "previous_page_number": "The Previous page number or null",
+
+    "paginator": {
+
+    "num_pages": "The total numbers of pages"
+
+    },
+
+    "has_next": "Boolean if there is a next page",
+
+    "has_previous": "Boolean if there is a previous page"
+
+    }
+
+
+    Full Body Example:
+
+
+    {
+
+    "count": 100,
+
+    "data": ["value-0", "[...]", "value-9"],
+
+    "success": true,
+
+    "pagination": {
+
+    "number": 1,
+
+    "next_page_number": 2,
+
+    "previous_page_number": null,
+
+    "paginator": {
+
+    "num_pages": 10
+
+    },
+
+    "has_next": true,
+
+    "has_previous": false
+
+    }
+
+    }
+
+
+    Pagination - Parameters​
+
+
+    You can add those values to manipulate the pagination object in the URL Parameters.
+
+
+    page
+
+
+    limit
+
+
+    Example:
+
+
+    # To get the second page
+
+    GET - https://api.edgegap.com/v1/apps?page=2
+
+
+    # To change the count of element in one page (20/page)
+
+    GET - https://api.edgegap.com/v1/apps?limit=20
+
+
+    # You can mix those (20/page, second page)
+
+    GET - https://api.edgegap.com/v1/apps?page=2&limit=20'
+  termsOfService: https://console.edgegap.com/terms-of-service
   contact:
-    name: Edgegap Support
-    url: https://edgegap.com/contact/
-  version: '1.0'
+    name: Email
+    email: info@edgegap.com
+    url: https://edgegap.com
 servers:
 - url: https://api.edgegap.com
-  description: Edgegap Arbitrium Management API
 security:
-- AuthToken: []
+- apiKey: []
 tags:
 - name: Applications
-  description: Manage applications registered on Edgegap.
+  description: Applications Control API - Please refer to this documentation to get started with applications.
 paths:
   /v1/app:
-    get:
-      operationId: listApplications
-      tags:
-      - Applications
-      summary: List applications
-      description: Returns a paginated list of applications for the account.
-      parameters:
-      - name: page
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationList'
     post:
-      operationId: createApplication
-      tags:
-      - Applications
-      summary: Create application
-      description: Registers a new application on Edgegap.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ApplicationCreate'
       responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '200':
-          description: OK
+          description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Application'
+      summary: Create a New Application
+      description: Create an application that will regroup application versions.
+      operationId: application-post
+      tags:
+      - Applications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationPost'
+        required: true
   /v1/app/{app_name}:
-    get:
-      operationId: getApplication
-      tags:
-      - Applications
-      summary: Get application
-      parameters:
-      - $ref: '#/components/parameters/AppName'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Application'
-    patch:
-      operationId: updateApplication
-      tags:
-      - Applications
-      summary: Update application
-      parameters:
-      - $ref: '#/components/parameters/AppName'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ApplicationCreate'
-      responses:
-        '200':
-          description: OK
-    delete:
-      operationId: deleteApplication
-      tags:
-      - Applications
-      summary: Delete application
-      parameters:
-      - $ref: '#/components/parameters/AppName'
-      responses:
-        '200':
-          description: OK
-components:
-  schemas:
-    Application:
-      type: object
-      properties:
-        name:
-          type: string
-        is_active:
-          type: boolean
-        is_telemetry_agent_active:
-          type: boolean
-        image:
-          type: string
-        create_time:
-          type: string
-          format: date-time
-    ApplicationCreate:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        is_active:
-          type: boolean
-        is_telemetry_agent_active:
-          type: boolean
-    ApplicationList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Application'
-        total_count:
-          type: integer
-  parameters:
-    AppName:
-      name: app_name
+    parameters:
+    - name: app_name
       in: path
       required: true
       schema:
         type: string
+    patch:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+      summary: Update an Application
+      description: Update an application with new information.
+      operationId: application-patch
+      tags:
+      - Applications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationPatch'
+        required: true
+    get:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+      summary: Get an Application
+      description: Retrieve an application and its information.
+      operationId: application-get
+      tags:
+      - Applications
+    delete:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+      summary: Delete an Application
+      description: Delete an application and all its current versions.
+      operationId: application-delete
+      tags:
+      - Applications
+  /v1/app/{app_name}/version:
+    post:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppVersionCreateResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '424':
+          description: Failed Dependency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Create a New Application Version
+      description: Create an application version associated with an application. The version contains all the specifications to create a deployment.
+      operationId: app-version-post
+      parameters:
+      - name: app_name
+        in: path
+        required: true
+        description: The name of the application associated
+        schema:
+          type: string
+      tags:
+      - Applications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppVersionCreatePayload'
+        required: true
+  /v1/app/{app_name}/version/{version_name}:
+    delete:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppVersionDelete'
+      summary: Delete an Application Version
+      description: Delete a specific version of an application.
+      operationId: app-version-delete
+      parameters:
+      - name: app_name
+        in: path
+        required: true
+        description: The name of the application
+        schema:
+          type: string
+      - name: version_name
+        in: path
+        required: true
+        description: The name of the application version
+        schema:
+          type: string
+      tags:
+      - Applications
+    get:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppVersionPayload'
+      summary: Get an Application Version
+      description: Retrieve the specifications of an application version.
+      operationId: app-version-get
+      parameters:
+      - name: app_name
+        in: path
+        required: true
+        description: The name of the application
+        schema:
+          type: string
+      - name: version_name
+        in: path
+        required: true
+        description: The name of the application version
+        schema:
+          type: string
+      tags:
+      - Applications
+    patch:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppVersionUpdateResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '424':
+          description: Failed Dependency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Update an Application Version
+      description: Update an application version with new specifications.
+      operationId: app-versions-patch
+      parameters:
+      - name: app_name
+        in: path
+        required: true
+        description: The name of the application
+        schema:
+          type: string
+      - name: version_name
+        in: path
+        required: true
+        description: The name of the application version
+        schema:
+          type: string
+      tags:
+      - Applications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppVersionUpdatePayload'
+        required: true
+  /v1/app/{app_name}/versions:
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppVersionList'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: List All Versions for an Application
+      description: List all versions of a specific application.
+      operationId: app-versions-get
+      parameters:
+      - name: app_name
+        in: path
+        required: true
+        description: The name of the application
+        schema:
+          type: string
+      tags:
+      - Applications
+  /v1/apps:
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Applications'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: List All Applications
+      description: List all the applications that you own.
+      operationId: applications-get
+      tags:
+      - Applications
+components:
+  schemas:
+    AppVersionCreateSessionConfig:
+      required:
+      - kind
+      - sockets
+      properties:
+        kind:
+          type: string
+          description: 'The kind of session to create. If ''Default'' if chosen, the ''session_config'' will be ignored. The kind of session must be: Default, Seat, Match'
+          example: Seat
+          enum:
+          - Default
+          - Seat
+          - Match
+        sockets:
+          type: integer
+          description: With seats, each player in a session occupies one socket slot. With matches, each session occupies one socket slot in the deployment, regardless of the number of players.
+          example: 10
+          minimum: 1
+        autodeploy:
+          type: boolean
+          description: If the system should automatically creates a deployment of this app version when a session is created and no sockets are available in existing deployments.
+        empty_ttl:
+          type: integer
+          description: The number of minutes a session deployment can remain empty before being automatically terminated. A deployment is considered empty when its socket count is zero.
+          example: 60
+          minimum: 1
+        session_max_duration:
+          type: integer
+          description: (DEPRECATED)
+          minimum: 60
+      type: object
+    AppVersionPort:
+      required:
+      - port
+      - protocol
+      properties:
+        port:
+          type: integer
+          description: The port number to expose for the application. At least one port is required to accept client connections. Use 0 for 1:1 port mapping, which will assign a random port number at deployment time, this must be handled by the application.
+          example: 7777
+          minimum: 0
+          maximum: 59999
+        protocol:
+          type: string
+          description: 'Available protocols: TCP, UDP, TCP/UDP, HTTP, HTTPS, WS or WSS'
+          example: UDP
+        to_check:
+          type: boolean
+          description: Specifies whether the port must pass our validation checks. If validation fails, the deployment will be marked as an error.
+          default: true
+          example: true
+        tls_upgrade:
+          type: boolean
+          description: When set to true, the port will be upgraded to TLS if using HTTP or WS.
+          default: false
+          example: false
+        name:
+          type: string
+          description: An optional name for the port to simplify management. Required if using port 0 for 1:1 port mapping.
+          example: game_port
+      type: object
+      additionalProperties: false
+    AppVersionUpdateSessionConfig:
+      properties:
+        kind:
+          type: string
+          description: 'The kind of session to create. If ''Default'' if chosen, the application will be handled like a normal application. The kind of session must be: Default, Seat, Match'
+          example: Seat
+          enum:
+          - Default
+          - Seat
+          - Match
+        sockets:
+          type: integer
+          description: With seats, each player in a session occupies one socket slot. With matches, each session occupies one socket slot in the deployment, regardless of the number of players.
+          example: 10
+          minimum: 1
+        autodeploy:
+          type: boolean
+          description: If the system should automatically creates a deployment of this app version when a session is created and no sockets are available in existing deployments.
+        empty_ttl:
+          type: integer
+          description: The number of minutes a session deployment can remain empty before being automatically terminated. A deployment is considered empty when its socket count is zero.
+          example: 60
+          minimum: 1
+        session_max_duration:
+          type: integer
+          description: (DEPRECATED)
+          minimum: 60
+      type: object
+    Applications:
+      properties:
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+      type: object
+    AppVersionEnv:
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          description: The key name for the environment variable to be set in the container.
+          example: MAP_ID
+        value:
+          type: string
+          description: The value assigned to the specified environment variable key.
+          example: forest1
+        is_secret:
+          type: boolean
+          description: This will encrypt the value in our database and prevent it from being readable by any external source.
+      type: object
+    AppVersionCreatePayload:
+      required:
+      - docker_image
+      - docker_repository
+      - docker_tag
+      - name
+      - req_cpu
+      - req_memory
+      properties:
+        name:
+          type: string
+          description: This is the identifier for your version. It’s often linked to a build version, but can be any unique name.
+          example: 1.0.0
+          minLength: 1
+          maxLength: 64
+        is_active:
+          type: boolean
+          description: This boolean tells the system whether this version can be deployed or is deactivated.
+          example: true
+        docker_repository:
+          type: string
+          description: ‘docker_repository’ is named incorrectly, this property references the Docker registry where this version’s container image is hosted (e.g., ‘registry.edgegap.com’ or ‘docker.io’).
+          example: docker.io
+        docker_image:
+          type: string
+          description: The Docker image for your version, usually including a namespace or project.
+          example: edgegap/lyrastartergame
+        docker_tag:
+          type: string
+          description: The Docker tag for your version. It must be valid according to your Docker image.
+          example: 25.05.30-16.45.19-04
+        private_username:
+          type: string
+          description: The username used to access your container registry. This is not your Edgegap account credential.
+          example: my_username
+        private_token:
+          type: string
+          description: The token or password used to access your container registry. This is not your Edgegap account password.
+          example: my_password
+        req_cpu:
+          type: integer
+          description: The number of vCPU units required to run your server container (1024 units = 1 vCPU).
+          example: 1536
+          minimum: 100
+        req_memory:
+          type: integer
+          description: The amount of memory in MB required to run your server container (1024 MB = 1 GB). It can be at most twice the number of vCPU units requested.
+          example: 3072
+          minimum: 100
+        req_video:
+          type: integer
+          description: Units of GPU needed (1024 = 1 GPU)
+          example: 0
+          minimum: 0
+        max_duration:
+          type: integer
+          description: The maximum duration in minutes the app version can run before being automatically stopped. If omitted, the default is 1440 minutes (24 hours).
+          example: 30
+        force_cache:
+          type: boolean
+          description: Enable faster deployments by caching your container across all Edgegap locations. Recommended for live games.
+          example: true
+        caching_percent:
+          type: number
+          description: Current caching percentage on scale 0-1, with 1 meaning 100% global cache coverage. Values above 0.8 are considered to be a good caching coverage level.
+          example: 0.8
+        time_to_deploy:
+          type: integer
+          description: Time in seconds to wait for the app version to deploy before marking it as failed. Useful for enforcing strict deployment time limits.
+          example: 300
+          minimum: 15
+        session_config:
+          description: Parameters for session-based app versions.
+          $ref: '#/components/schemas/AppVersionCreateSessionConfig'
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppVersionPort'
+        envs:
+          type: array
+          description: Environment variables to be set in the container for each deployment.
+          items:
+            $ref: '#/components/schemas/AppVersionEnv'
+        verify_image:
+          type: boolean
+          description: By enabling the verify_image option, your image information (docker_repository, docker_image, docker_tag) will be tested to ensure the image can be pulled successfully.
+          default: false
+          example: true
+        termination_grace_period_seconds:
+          type: integer
+          description: Termination grace period in seconds after sending the SIGTERM signal to the container. Allows graceful shutdown and post-processing before the container stops.
+          example: 5
+          minimum: 5
+          maximum: 3600
+        endpoint_storage:
+          type: string
+          description: The name of the endpoint storage to use to store the container logs at the end of the deployment. This will overwrite the default storage in the app version.
+          example: my-storage
+        command:
+          type:
+          - string
+          - 'null'
+          description: Entrypoint/command override for your container. This replaces the default command and should be used with caution.
+          example: null | 'string'
+        arguments:
+          type:
+          - string
+          - 'null'
+          description: Arguments to pass to the container’s command. This replace the default arguments and should be used with caution
+          example: null | 'string'
+        dns_config:
+          type: string
+          description: The name of the DNS configuration to link with your deployment.
+        will_deploy_in_mainland_china:
+          type: boolean
+          description: If true, the app version will only be deployed in Mainland China locations. Otherwise, it will never deploy in Mainland China locations.
+          default: false
+        restart_policy:
+          type: string
+          description: The restart policy for the deployment. The default is to always restart unless you terminate the deployment.
+          default: always
+          example: always
+          enum:
+          - always
+          - never
+          - on_failure
+      type: object
+    Application:
+      required:
+      - create_time
+      - is_active
+      - last_updated
+      - name
+      properties:
+        name:
+          type: string
+          description: Application name
+          example: Example App
+        is_active:
+          type: boolean
+          description: If the application can be deployed
+          example: true
+        is_telemetry_agent_active:
+          type: boolean
+          description: If the telemetry agent is installed on the versions of this app.
+          example: false
+        image:
+          type: string
+          description: Image base64 string
+          example: iVBORw0KGgoAAAANSUhEUg[...]AAABJRU5ErkJggg==
+        create_time:
+          type: string
+          description: Creation date
+          example: '2026-10-19 20:00:37.815706'
+        last_updated:
+          type: string
+          description: Date of the last update
+          example: '2026-10-19 20:00:37.815706'
+      type: object
+    AppVersionDelete:
+      properties:
+        success:
+          type: boolean
+          description: If the creation happened correctly
+        message:
+          type: string
+      type: object
+    ApplicationPost:
+      required:
+      - image
+      - is_active
+      - name
+      properties:
+        name:
+          type: string
+          description: The application name
+          example: Example App
+          minLength: 1
+          maxLength: 64
+        is_active:
+          type: boolean
+          description: If the application can be deployed
+          example: true
+        is_telemetry_agent_active:
+          type: boolean
+          description: If the telemetry agent is installed on the versions of this app.
+          example: false
+        image:
+          type: string
+          description: Image base64 string
+          example: iVBORw0KGgoAAAANSUhEUg[...]AAABJRU5ErkJggg==
+      type: object
+    AppVersionCreateResponse:
+      properties:
+        success:
+          type: boolean
+          description: If the creation happened correctly
+        version:
+          $ref: '#/components/schemas/AppVersionPayload'
+      type: object
+    AppVersionPayload:
+      required:
+      - docker_image
+      - docker_repository
+      - docker_tag
+      - name
+      - req_cpu
+      - req_memory
+      properties:
+        name:
+          type: string
+          description: This is the identifier for your version. It’s often linked to a build version, but can be any unique name.
+          example: 1.0.0
+          minLength: 1
+          maxLength: 64
+        is_active:
+          type: boolean
+          description: This boolean tells the system whether this version can be deployed or is deactivated.
+          example: true
+        docker_repository:
+          type: string
+          description: ‘docker_repository’ is named incorrectly, this property references the Docker registry where this version’s container image is hosted (e.g., ‘registry.edgegap.com’ or ‘docker.io’).
+          example: docker.io
+        docker_image:
+          type: string
+          description: The Docker image for your version, usually including a namespace or project.
+          example: edgegap/lyrastartergame
+        docker_tag:
+          type: string
+          description: The Docker tag for your version. It must be valid according to your Docker image.
+          example: 25.05.30-16.45.19-04
+        private_username:
+          type: string
+          description: The username used to access your container registry. This is not your Edgegap account credential.
+          example: my_username
+        private_token:
+          type: string
+          description: The token or password used to access your container registry. This is not your Edgegap account password.
+          example: my_password
+        req_cpu:
+          type: integer
+          description: The number of vCPU units required to run your server container (1024 units = 1 vCPU).
+          example: 1536
+          minimum: 100
+        req_memory:
+          type: integer
+          description: The amount of memory in MB required to run your server container (1024 MB = 1 GB). It can be at most twice the number of vCPU units requested.
+          example: 3072
+          minimum: 100
+        req_video:
+          type: integer
+          description: Units of GPU needed (1024 = 1 GPU)
+          example: 0
+          minimum: 0
+        max_duration:
+          type: integer
+          description: The maximum duration in minutes the app version can run before being automatically stopped. If omitted, the default is 1440 minutes (24 hours).
+          example: 30
+        force_cache:
+          type: boolean
+          description: Enable faster deployments by caching your container across all Edgegap locations. Recommended for live games.
+          example: true
+        caching_percent:
+          type: number
+          description: Current caching percentage on scale 0-1, with 1 meaning 100% global cache coverage. Values above 0.8 are considered to be a good caching coverage level.
+          example: 0.8
+        kind:
+          type: string
+          description: Specifies whether the app version is a default or session-based version (e.g., “default” or “session”).
+          default: 0
+          example: 0
+        time_to_deploy:
+          type: integer
+          description: Time in seconds to wait for the app version to deploy before marking it as failed. Useful for enforcing strict deployment time limits.
+          example: 300
+          minimum: 15
+        session_config:
+          description: Parameters for session-based app versions.
+          $ref: '#/components/schemas/AppVersionCreateSessionConfig'
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppVersionPort'
+        envs:
+          type: array
+          description: Environment variables to be set in the container for each deployment.
+          items:
+            $ref: '#/components/schemas/AppVersionEnv'
+        verify_image:
+          type: boolean
+          description: By enabling the verify_image option, your image information (docker_repository, docker_image, docker_tag) will be tested to ensure the image can be pulled successfully.
+          default: false
+          example: true
+        termination_grace_period_seconds:
+          type: integer
+          description: Termination grace period in seconds after sending the SIGTERM signal to the container. Allows graceful shutdown and post-processing before the container stops.
+          example: 5
+          minimum: 5
+          maximum: 3600
+        endpoint_storage:
+          type: string
+          description: The name of the endpoint storage to use to store the container logs at the end of the deployment. This will overwrite the default storage in the app version.
+          example: my-storage
+        command:
+          type:
+          - string
+          - 'null'
+          description: Entrypoint/command override for your container. This replaces the default command and should be used with caution.
+          example: null | 'string'
+        arguments:
+          type:
+          - string
+          - 'null'
+          description: Arguments to pass to the container’s command. This replace the default arguments and should be used with caution
+          example: null | 'string'
+        create_time:
+          type: string
+          format: date-time
+          description: The creation time of the app version
+        last_updated:
+          type: string
+          format: date-time
+          description: The last update time of the app version
+        dns_config:
+          type: string
+          description: The name of the DNS configuration to link with your deployment.
+        will_deploy_in_mainland_china:
+          type: boolean
+          description: If true, the app version will only be deployed in Mainland China locations. Otherwise, it will never deploy in Mainland China locations.
+          default: false
+        restart_policy:
+          type: string
+          description: The restart policy for the deployment. The default is to always restart unless you terminate the deployment.
+          default: always
+          example: always
+          enum:
+          - always
+          - never
+          - on_failure
+      type: object
+    AppVersionList:
+      properties:
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppVersionPayload'
+        total_count:
+          type: integer
+      type: object
+    AppVersionUpdateResponse:
+      properties:
+        success:
+          type: boolean
+          description: If the creation happened correctly
+        version:
+          $ref: '#/components/schemas/AppVersionPayload'
+      type: object
+    AppVersionUpdatePayload:
+      properties:
+        name:
+          type: string
+          description: This is the identifier for your version. It’s often linked to a build version, but can be any unique name.
+          example: 1.0.0
+          minLength: 1
+          maxLength: 64
+        is_active:
+          type: boolean
+          description: This boolean tells the system whether this version can be deployed or is deactivated.
+          example: true
+        req_cpu:
+          type: integer
+          description: The number of vCPU required for this version to run in edgegap unit 1024 units = 1 vCPU.
+          example: 512
+          minimum: 100
+        req_memory:
+          type: integer
+          description: The amount of memory in MB required for this version to run in MiB unit 1024 MiB = 1 GiB.
+          example: 1024
+          minimum: 100
+        docker_repository:
+          type: string
+          description: ‘docker_repository’ is named incorrectly, this property references the Docker registry where this version’s container image is hosted (e.g., ‘registry.edgegap.com’ or ‘docker.io’).
+          example: docker.io
+        docker_image:
+          type: string
+          description: The Docker image for your version, usually including a namespace or project.
+          example: edgegap/lyrastartergame
+        docker_tag:
+          type: string
+          description: The Docker tag for your version. It must be valid according to your Docker image.
+          example: 25.05.30-16.45.19-04
+        private_username:
+          type: string
+          description: The username used to access your container registry. This is not your Edgegap account credential.
+          example: my_username
+        private_token:
+          type: string
+          description: The token or password used to access your container registry. This is not your Edgegap account password.
+          example: my_password
+        max_duration:
+          type:
+          - integer
+          - 'null'
+          description: The maximum duration in minutes the app version can run before being automatically stopped. If omitted, the default is 1440 minutes (24 hours).
+          example: 30
+        force_cache:
+          type: boolean
+          description: Enable faster deployments by caching your container across all Edgegap locations. Recommended for live games.
+          example: true
+        time_to_deploy:
+          type: integer
+          description: Time in seconds to wait for the app version to deploy before marking it as failed. Useful for enforcing strict deployment time limits.
+          example: 300
+          minimum: 15
+        session_config:
+          description: Parameters for session-based app versions.
+          $ref: '#/components/schemas/AppVersionUpdateSessionConfig'
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppVersionPort'
+        envs:
+          type: array
+          description: Environment variables to be set in the container for each deployment.
+          items:
+            $ref: '#/components/schemas/AppVersionEnv'
+        termination_grace_period_seconds:
+          type: integer
+          description: Termination grace period in seconds after sending the SIGTERM signal to the container. Allows graceful shutdown and post-processing before the container stops.
+          example: 5
+          minimum: 5
+          maximum: 3600
+        verify_image:
+          type: boolean
+          description: By enabling the verify_image option, your image infos (docker_repository, docker_image, docker_tag) will be tested.
+          default: false
+          example: true
+        endpoint_storage:
+          type: string
+          description: The name of the endpoint storage to use to store the container logs at the end of the deployment. This will overwrite the default storage in the app version.
+          example: my-storage
+        command:
+          type:
+          - string
+          - 'null'
+          description: Entrypoint/command override for your container. This replaces the default command and should be used with caution.
+          example: null | 'string'
+        arguments:
+          type:
+          - string
+          - 'null'
+          description: Arguments to pass to the container’s command. This replace the default arguments and should be used with caution
+          example: null | 'string'
+        dns_config:
+          type: string
+          description: The name of the DNS configuration to link with your deployment.
+        will_deploy_in_mainland_china:
+          type: boolean
+          description: If true, the app version will only be deployed in Mainland China locations. Otherwise, it will never deploy in Mainland China locations.
+          default: false
+      type: object
+    ApplicationPatch:
+      properties:
+        name:
+          type: string
+          description: Application name
+          example: Example App
+          minLength: 3
+          maxLength: 64
+        is_active:
+          type: boolean
+          description: If the application can be deployed
+          example: true
+        is_telemetry_agent_active:
+          type: boolean
+          description: If the telemetry agent is installed on the versions of this app.
+          example: false
+        image:
+          type: string
+          description: Image base64 string
+          example: iVBORw0KGgoAAAANSUhEUg[...]AAABJRU5ErkJggg==
+      type: object
+    Error:
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: A message depending of the request termination
+      type: object
   securitySchemes:
-    AuthToken:
+    apiKey:
       type: apiKey
       in: header
-      name: Authorization
-      description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent as `Authorization: token <your_token>`.'
+      name: authorization
+      description: 'To access Edgegap API, generate (and view) your secret tokens in Dashboard - User Settings / Tokens. Add your secret token with each API request as an HTTP header (include the word token): `Authorization: token xxxxxxxx-e458-4592-b607-c2c28afd8b62`'

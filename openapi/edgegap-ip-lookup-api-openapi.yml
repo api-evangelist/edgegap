@@ -1,0 +1,317 @@
+openapi: 3.2.0
+info:
+  title: Edgegap V1 IP Lookup API
+  version: 0.0.0
+  description: 'Introduction
+
+
+    The Edgegap API lets you manage all your resources from standard HTTP requests. We promote using them to automate all your processes that are using Edgegap.
+
+
+    If you have any questions, don''t hesitate to contact us via email, or you can also jump on our Discord. We will be happy to help. Feel free to make features request; we also love those.
+
+
+    Pagination - Response​
+
+
+    The GET response body can be returned with pagination to avoid requesting all the data at once.
+
+
+    Pagination object will always be under the paginator key.
+
+
+    {
+
+    "number": "The Current page, default=1",
+
+    "next_page_number": "The Next page number or null",
+
+    "previous_page_number": "The Previous page number or null",
+
+    "paginator": {
+
+    "num_pages": "The total numbers of pages"
+
+    },
+
+    "has_next": "Boolean if there is a next page",
+
+    "has_previous": "Boolean if there is a previous page"
+
+    }
+
+
+    Full Body Example:
+
+
+    {
+
+    "count": 100,
+
+    "data": ["value-0", "[...]", "value-9"],
+
+    "success": true,
+
+    "pagination": {
+
+    "number": 1,
+
+    "next_page_number": 2,
+
+    "previous_page_number": null,
+
+    "paginator": {
+
+    "num_pages": 10
+
+    },
+
+    "has_next": true,
+
+    "has_previous": false
+
+    }
+
+    }
+
+
+    Pagination - Parameters​
+
+
+    You can add those values to manipulate the pagination object in the URL Parameters.
+
+
+    page
+
+
+    limit
+
+
+    Example:
+
+
+    # To get the second page
+
+    GET - https://api.edgegap.com/v1/apps?page=2
+
+
+    # To change the count of element in one page (20/page)
+
+    GET - https://api.edgegap.com/v1/apps?limit=20
+
+
+    # You can mix those (20/page, second page)
+
+    GET - https://api.edgegap.com/v1/apps?page=2&limit=20'
+  termsOfService: https://console.edgegap.com/terms-of-service
+  contact:
+    name: Email
+    email: info@edgegap.com
+    url: https://edgegap.com
+servers:
+- url: https://api.edgegap.com
+security:
+- apiKey: []
+tags:
+- name: IP Lookup
+  description: IP API - IP addresses related operations.
+paths:
+  /v1/ip:
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IPAddressResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Get Your Public IP
+      description: Retrieve your public IP address.
+      operationId: IP
+      tags:
+      - IP Lookup
+  /v1/ip/{ip}/lookup:
+    parameters:
+    - name: ip
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IPAddressLookupResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Get an IP's information
+      description: Lookup an IP address and return the associated information.
+      operationId: IPLookup
+      tags:
+      - IP Lookup
+      x-operation-id-source: normalized
+      x-operation-id-original: IP lookup
+  /v1/ips/lookup:
+    post:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IPAddressesLookupResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorizeed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Get IPs Information in Bulk
+      description: Lookup IP addresses and return the associated information. Maximum of 20 IPs.
+      operationId: IPsLookup
+      tags:
+      - IP Lookup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IPAddressesLookupPayload'
+        required: true
+      x-operation-id-source: normalized
+      x-operation-id-original: IPs lookup
+components:
+  schemas:
+    IPAddressLookupResponse:
+      required:
+      - ip_address
+      properties:
+        type:
+          type: string
+          description: IP address type
+          example: IPv4
+        ip_address:
+          type: string
+          description: IP address
+          example: 1.1.1.1
+        location:
+          $ref: '#/components/schemas/IPAddressLookupLocation'
+      type: object
+    IPAddressResponse:
+      required:
+      - public_ip
+      properties:
+        public_ip:
+          type: string
+          description: Public IP Address
+          example: 174.91.204.75
+      type: object
+    IPAddressLookupLocationContinent:
+      properties:
+        code:
+          type: string
+          description: Continent code
+          example: AF
+        name:
+          type: string
+          description: Continent name
+          example: Africa
+      type: object
+    IPAddressLookupLocationCountry:
+      properties:
+        code:
+          type: string
+          description: Country code
+          example: CA
+        name:
+          type: string
+          description: Country name
+          example: Canada
+      type: object
+    Error:
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: A message depending of the request termination
+      type: object
+    IPAddressesLookupResponse:
+      required:
+      - addresses
+      properties:
+        addresses:
+          type: array
+          description: IP Addresses
+          items:
+            $ref: '#/components/schemas/IPAddressLookupResponse'
+      type: object
+    IPAddressLookupLocation:
+      properties:
+        continent:
+          $ref: '#/components/schemas/IPAddressLookupLocationContinent'
+        country:
+          $ref: '#/components/schemas/IPAddressLookupLocationCountry'
+        latitude:
+          type: number
+          description: Latitude
+          example: '45.4215'
+        longitude:
+          type: number
+          description: Longitude
+          example: '-75.6972'
+      type: object
+    IPAddressesLookupPayload:
+      required:
+      - addresses
+      properties:
+        addresses:
+          type: array
+          description: IP Addresses
+          example:
+          - 1.1.1.1
+          items:
+            type: string
+      type: object
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: authorization
+      description: 'To access Edgegap API, generate (and view) your secret tokens in Dashboard - User Settings / Tokens. Add your secret token with each API request as an HTTP header (include the word token): `Authorization: token xxxxxxxx-e458-4592-b607-c2c28afd8b62`'

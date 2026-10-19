@@ -1,91 +1,1124 @@
 openapi: 3.2.0
 info:
-  title: Edgegap Arbitrium Fleets API
-  description: Representative OpenAPI description of the Edgegap Arbitrium REST API for distributed edge game-server orchestration. Covers applications, application versions, deployments, sessions, matchmaking, relays/networking, metrics, and private fleets. Auto-deploy dedicated game servers to Edgegap's global network of edge locations. This document is a faithful, representative subset authored for cataloging; consult the official Edgegap documentation for the complete, authoritative reference.
-  termsOfService: https://edgegap.com/terms-of-service/
+  title: Edgegap V1 Fleets API
+  version: 0.0.0
+  description: 'Introduction
+
+
+    The Edgegap API lets you manage all your resources from standard HTTP requests. We promote using them to automate all your processes that are using Edgegap.
+
+
+    If you have any questions, don''t hesitate to contact us via email, or you can also jump on our Discord. We will be happy to help. Feel free to make features request; we also love those.
+
+
+    Pagination - Response​
+
+
+    The GET response body can be returned with pagination to avoid requesting all the data at once.
+
+
+    Pagination object will always be under the paginator key.
+
+
+    {
+
+    "number": "The Current page, default=1",
+
+    "next_page_number": "The Next page number or null",
+
+    "previous_page_number": "The Previous page number or null",
+
+    "paginator": {
+
+    "num_pages": "The total numbers of pages"
+
+    },
+
+    "has_next": "Boolean if there is a next page",
+
+    "has_previous": "Boolean if there is a previous page"
+
+    }
+
+
+    Full Body Example:
+
+
+    {
+
+    "count": 100,
+
+    "data": ["value-0", "[...]", "value-9"],
+
+    "success": true,
+
+    "pagination": {
+
+    "number": 1,
+
+    "next_page_number": 2,
+
+    "previous_page_number": null,
+
+    "paginator": {
+
+    "num_pages": 10
+
+    },
+
+    "has_next": true,
+
+    "has_previous": false
+
+    }
+
+    }
+
+
+    Pagination - Parameters​
+
+
+    You can add those values to manipulate the pagination object in the URL Parameters.
+
+
+    page
+
+
+    limit
+
+
+    Example:
+
+
+    # To get the second page
+
+    GET - https://api.edgegap.com/v1/apps?page=2
+
+
+    # To change the count of element in one page (20/page)
+
+    GET - https://api.edgegap.com/v1/apps?limit=20
+
+
+    # You can mix those (20/page, second page)
+
+    GET - https://api.edgegap.com/v1/apps?page=2&limit=20'
+  termsOfService: https://console.edgegap.com/terms-of-service
   contact:
-    name: Edgegap Support
-    url: https://edgegap.com/contact/
-  version: '1.0'
+    name: Email
+    email: info@edgegap.com
+    url: https://edgegap.com
 servers:
 - url: https://api.edgegap.com
-  description: Edgegap Arbitrium Management API
 security:
-- AuthToken: []
+- apiKey: []
 tags:
 - name: Fleets
-  description: Private fleet deployments and host inventory.
+  description: Fleets Control API - Please refer to this documentation to get started with fleets.
 paths:
-  /v2/private-fleets/deployments:
+  /v1/fleet:
     post:
-      operationId: createPrivateFleetDeployment
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FleetPostResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Create a Fleet
+      description: Create a fleet. A fleet is a top-level object; you must create child resources to work properly.
+      operationId: fleet-create
       tags:
       - Fleets
-      summary: Create private fleet deployment
-      description: Deploys onto self-managed hosts registered in a private fleet.
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeploymentCreate'
+              $ref: '#/components/schemas/FleetPostPayload'
+        required: true
+  /v1/fleet/{fleet_name}:
+    delete:
       responses:
         '200':
-          description: OK
-  /v2/private-fleets/{fleet_name}/hosts:
-    get:
-      operationId: listPrivateFleetHosts
-      tags:
-      - Fleets
-      summary: List private fleet hosts
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FleetDeleteResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Delete a Fleet
+      description: Delete a fleet, its policies and links between the application versions.
+      operationId: fleet-delete
       parameters:
       - name: fleet_name
         in: path
         required: true
+        description: The name of the fleet
         schema:
           type: string
+      tags:
+      - Fleets
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FleetGetResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Get a Fleet
+      description: Retrieve a fleet with its details.
+      operationId: fleet-get
+      parameters:
+      - name: fleet_name
+        in: path
+        required: true
+        description: The name of the fleet
+        schema:
+          type: string
+      tags:
+      - Fleets
+    patch:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FleetPatchResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Update a Fleet
+      description: Update a fleet with new specifications.
+      operationId: fleet-update
+      parameters:
+      - name: fleet_name
+        in: path
+        required: true
+        description: The name of the fleet
+        schema:
+          type: string
+      tags:
+      - Fleets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FleetPatchPayload'
+        required: true
+  /v1/fleet/{fleet_name}/app/{app_name}/version/{version_name}:
+    put:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HorizontalScalerAppVersionLink'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Link an Application Version to a Fleet
+      description: Link an application version to a fleet. By linking this version, the fleet will automatically create deployments of this version according to the fleet policies.
+      operationId: fleet-link-app-version
+      parameters:
+      - name: fleet_name
+        in: path
+        required: true
+        description: The name of the fleet
+        schema:
+          type: string
+      - name: app_name
+        in: path
+        required: true
+        description: The name of the application to link
+        schema:
+          type: string
+      - name: version_name
+        in: path
+        required: true
+        description: The name of the application version to link
+        schema:
+          type: string
+      tags:
+      - Fleets
+    delete:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: Success
+      summary: Unlink an Application Version From a Fleet
+      description: Unlink an application version from a fleet. It will not delete the application version or the fleet
+      operationId: fleet-unlink-app-version
+      parameters:
+      - name: fleet_name
+        in: path
+        required: true
+        description: The name of the fleet
+        schema:
+          type: string
+      - name: app_name
+        in: path
+        required: true
+        description: The name of the application to link
+        schema:
+          type: string
+      - name: version_name
+        in: path
+        required: true
+        description: The name of the application version to link
+        schema:
+          type: string
+      tags:
+      - Fleets
+  /v1/fleet/{fleet_name}/policies:
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HorizontalScalerConstraintList'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: List All Policies of a Fleet
+      description: List all the policies of a fleet.
+      operationId: fleet-policies-list
+      parameters:
+      - name: fleet_name
+        in: path
+        required: true
+        description: The name of the fleet
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        description: Limit of Fleet for each page
+        schema:
+          type: integer
+          default: 10
+      - name: X-Fields
+        in: header
+        description: An optional fields mask
+        schema:
+          type: string
+          format: mask
+      tags:
+      - Fleets
+    post:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FleetPoliciesPostResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Create a Fleet Policy
+      description: Create a fleet policy. Policies are conditions that the fleet must respect.
+      operationId: fleet-policies-create
+      parameters:
+      - name: fleet_name
+        in: path
+        required: true
+        description: The name of the fleet
+        schema:
+          type: string
+      tags:
+      - Fleets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FleetPoliciesPostPayload'
+        required: true
+  /v1/fleet/{fleet_name}/policies/{policy_name}:
+    delete:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Delete a Policy
+      description: Delete a policy. It will not delete the fleet.
+      operationId: fleet-policies-delete
+      parameters:
+      - name: fleet_name
+        in: path
+        required: true
+        description: The name of the fleet
+        schema:
+          type: string
+      - name: policy_name
+        in: path
+        required: true
+        description: The name of the policy to delete
+        schema:
+          type: string
+      tags:
+      - Fleets
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FleetPoliciesGetResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Get a Policy
+      description: Retrieve a specific policy of a fleet.
+      operationId: fleet-policies-get
+      parameters:
+      - name: fleet_name
+        in: path
+        required: true
+        description: The name of the fleet
+        schema:
+          type: string
+      - name: policy_name
+        in: path
+        required: true
+        description: The name of the policy
+        schema:
+          type: string
+      tags:
+      - Fleets
+    patch:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FleetPoliciesPatchPayload'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Update a Policy
+      description: Update a policy with new specifications.
+      operationId: fleet-policies-update
+      parameters:
+      - name: fleet_name
+        in: path
+        required: true
+        description: The name of the fleet
+        schema:
+          type: string
+      - name: policy_name
+        in: path
+        required: true
+        description: The name of the policy
+        schema:
+          type: string
+      tags:
+      - Fleets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FleetPoliciesPatchPayload'
+        required: true
+  /v1/fleets:
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FleetList'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: List All Fleets
+      description: List all the fleets you own.
+      operationId: fleets
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        description: Limit of Fleet for each page
+        schema:
+          type: integer
+          default: 10
+      tags:
+      - Fleets
 components:
   schemas:
-    DeploymentCreate:
-      type: object
+    FleetDeleteResponse:
       required:
-      - app_name
-      - version_name
+      - message
       properties:
-        app_name:
+        message:
           type: string
-        version_name:
+          description: Success Message
+      type: object
+    FleetPoliciesGetResponse:
+      required:
+      - data
+      - enabled
+      - maximum
+      - minimum
+      - name
+      - threshold
+      - type
+      properties:
+        name:
           type: string
-        ip_list:
+          description: Name of the Policy
+          example: policy_name
+        enabled:
+          type: boolean
+          description: If the Policy is enabled. Defaults to true.
+          example: true
+        type:
+          type: string
+          description: Type of the Policy. See our documentation for more information on the type and it's data.
+          example: Location
+          enum:
+          - Location
+          - Tag
+          - Coordinates
+        minimum:
+          type: integer
+          description: Minimum deployments at all time
+          example: 1
+          minimum: 1
+        maximum:
+          type: integer
+          description: Maximum deployments for the provided type.
+          example: 1
+          minimum: 1
+        threshold:
+          type: number
+          description: Based on the number of sockets connected, how filled should a session deployment be before initiating a scale-up deployment. Float between 0.1 and 1.
+          default: 0.9
+          minimum: 0.1
+          maximum: 1
+        data:
+          type: object
+          description: JSON object for your filters. See our documentation for more information.
+          example:
+            filters:
+            - field: city
+              values:
+              - Montreal
+              filter_type: any
+        create_time:
+          type: string
+          description: UTC time of policy creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of policy last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    FleetPoliciesPatchPayload:
+      properties:
+        name:
+          type: string
+          description: Name of the Policy
+          example: policy_name
+        enabled:
+          type: boolean
+          description: If the Policy is enabled. Defaults to true.
+          example: true
+        type:
+          type: string
+          description: Type of the Policy. See our documentation for more information on the type and it's data.
+          example: Location
+          enum:
+          - Location
+          - Tag
+          - Coordinates
+        minimum:
+          type: integer
+          description: Minimum deployments at all time
+          example: 1
+          minimum: 0
+        maximum:
+          type: integer
+          description: Maximum deployments for the provided type.
+          example: 1
+          minimum: 1
+        threshold:
+          type: number
+          description: Based on the number of sockets connected, how filled should a session deployment be before initiating a scale-up deployment. Float between 0.1 and 1.
+          example: 0.9
+          minimum: 0.1
+          maximum: 1
+        data:
+          type: object
+          description: JSON object for your filters. See our documentation for more information.
+          example:
+            filters:
+            - field: city
+              values:
+              - Montreal
+              filter_type: any
+        create_time:
+          type: string
+          description: UTC time of policy creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of policy last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    HorizontalScalerAppVersionLink:
+      required:
+      - app
+      - app_version
+      - fleet
+      properties:
+        app:
+          type: string
+          description: Name of the linked app of the linked version
+          example: app_name
+        app_version:
+          type: string
+          description: Name of the linked app version.
+          example: version_name
+        fleet:
+          type: string
+          description: Name of the fleet the app version is linked to.
+          example: fleet_name
+        create_time:
+          type: string
+          description: UTC time of link creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of link last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    FleetPatchResponse:
+      properties:
+        name:
+          type: string
+          description: Name of the Fleet
+          example: fleet_name
+        enabled:
+          type: boolean
+          description: If the Fleet is enabled
+        create_time:
+          type: string
+          description: UTC time of fleet creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of fleet last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    Paginator:
+      properties:
+        num_pages:
+          type: integer
+          description: Total pages count
+      type: object
+    FleetList:
+      properties:
+        fleets:
+          type: array
+          description: List of Fleets
+          items:
+            $ref: '#/components/schemas/FleetGetResponse'
+        pagination:
+          description: Pagination Object
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    FleetPoliciesPostPayload:
+      required:
+      - data
+      - enabled
+      - maximum
+      - minimum
+      - name
+      - threshold
+      - type
+      properties:
+        name:
+          type: string
+          description: Name of the Policy
+          example: policy_name
+        enabled:
+          type: boolean
+          description: If the Policy is enabled. Defaults to true.
+          example: true
+        type:
+          type: string
+          description: Type of the Policy. See our documentation for more information on the type and it's data.
+          example: Location
+          enum:
+          - Location
+          - Tag
+          - Coordinates
+        minimum:
+          type: integer
+          description: Minimum deployments at all time
+          example: 1
+          minimum: 1
+        maximum:
+          type: integer
+          description: Maximum deployments for the provided type.
+          example: 1
+          minimum: 1
+        threshold:
+          type: number
+          description: Based on the number of sockets connected, how filled should a session deployment be before initiating a scale-up deployment. Float between 0.1 and 1.
+          default: 0.9
+          minimum: 0.1
+          maximum: 1
+        data:
+          type: object
+          description: JSON object for your filters. See our documentation for more information.
+          example:
+            filters:
+            - field: city
+              values:
+              - Montreal
+              filter_type: any
+      type: object
+    FleetPatchPayload:
+      properties:
+        name:
+          type: string
+          description: Name of the Fleet
+          example: fleet_name
+        enabled:
+          type: boolean
+          description: If the Fleet is enabled
+      type: object
+    HorizontalScalerConstraintList:
+      properties:
+        policies:
           type: array
           items:
-            type: string
-        geo_ip_list:
-          type: array
-          items:
-            type: object
-            properties:
-              ip:
-                type: string
-              latitude:
-                type: number
-              longitude:
-                type: number
-        env_vars:
-          type: array
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-              value:
-                type: string
+            $ref: '#/components/schemas/FleetPoliciesGetResponse'
+        pagination:
+          description: Pagination Object
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    Pagination:
+      properties:
+        number:
+          type: integer
+          description: Current page number
+        next_page_number:
+          type: integer
+          description: Next page number
+        previous_page_number:
+          type: integer
+          description: Previous page number
+        paginator:
+          $ref: '#/components/schemas/Paginator'
+        has_next:
+          type: boolean
+          description: If there is a next page
+        has_previous:
+          type: boolean
+          description: If there is a previous page
+      type: object
+    FleetPostPayload:
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Name of the Fleet
+          example: fleet_name
+        enabled:
+          type: boolean
+          description: If the Fleet is enabled. Defaults to false.
+          default: false
+      type: object
+    FleetPostResponse:
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Name of the Fleet
+          example: fleet_name
+        enabled:
+          type: boolean
+          description: If the Fleet is enabled. Defaults to false.
+          default: false
+        create_time:
+          type: string
+          description: UTC time of fleet creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of fleet last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    FleetGetResponse:
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Name of the Fleet
+          example: fleet_name
+        enabled:
+          type: boolean
+          description: If the Fleet is enabled. Defaults to false.
+          default: false
+        create_time:
+          type: string
+          description: UTC time of fleet creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of fleet last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    FleetPoliciesPostResponse:
+      required:
+      - data
+      - enabled
+      - maximum
+      - minimum
+      - name
+      - threshold
+      - type
+      properties:
+        name:
+          type: string
+          description: Name of the Policy
+          example: policy_name
+        enabled:
+          type: boolean
+          description: If the Policy is enabled. Defaults to true.
+          example: true
+        type:
+          type: string
+          description: Type of the Policy. See our documentation for more information on the type and it's data.
+          example: Location
+          enum:
+          - Location
+          - Tag
+          - Coordinates
+        minimum:
+          type: integer
+          description: Minimum deployments at all time
+          example: 1
+          minimum: 1
+        maximum:
+          type: integer
+          description: Maximum deployments for the provided type.
+          example: 1
+          minimum: 1
+        threshold:
+          type: number
+          description: Based on the number of sockets connected, how filled should a session deployment be before initiating a scale-up deployment. Float between 0.1 and 1.
+          default: 0.9
+          minimum: 0.1
+          maximum: 1
+        data:
+          type: object
+          description: JSON object for your filters. See our documentation for more information.
+          example:
+            filters:
+            - field: city
+              values:
+              - Montreal
+              filter_type: any
+        create_time:
+          type: string
+          description: UTC time of policy creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of policy last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    Error:
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: A message depending of the request termination
+      type: object
   securitySchemes:
-    AuthToken:
+    apiKey:
       type: apiKey
       in: header
-      name: Authorization
-      description: 'API token generated in the Edgegap dashboard (User Settings / Tokens), sent as `Authorization: token <your_token>`.'
+      name: authorization
+      description: 'To access Edgegap API, generate (and view) your secret tokens in Dashboard - User Settings / Tokens. Add your secret token with each API request as an HTTP header (include the word token): `Authorization: token xxxxxxxx-e458-4592-b607-c2c28afd8b62`'

@@ -1,0 +1,12 @@
+{
+ "url": "https://api.edgegap.com/swagger.json",
+ "final": "https://api.edgegap.com/swagger.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 176016,
+ "sha256": "3a450e1729921288d437de67544976fc9432ebaedb444a28d5a2a1b409960125",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

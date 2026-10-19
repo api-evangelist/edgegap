@@ -1,34 +1,31 @@
 {
   "provider": "edgegap",
   "sources": [
-    "_original/edgegap-openapi.yml"
+    "_original/edgegap-openapi.json"
   ],
   "outputs": [
-    "edgegap-app-versions-api-openapi.yml",
     "edgegap-applications-api-openapi.yml",
+    "edgegap-container-registry-api-openapi.yml",
+    "edgegap-deployment-tags-api-openapi.yml",
     "edgegap-deployments-api-openapi.yml",
+    "edgegap-endpoint-storage-api-openapi.yml",
     "edgegap-fleets-api-openapi.yml",
-    "edgegap-matchmaking-api-openapi.yml",
+    "edgegap-ip-lookup-api-openapi.yml",
+    "edgegap-locations-api-openapi.yml",
     "edgegap-metrics-api-openapi.yml",
     "edgegap-relays-api-openapi.yml",
+    "edgegap-report-deployment-api-openapi.yml",
     "edgegap-sessions-api-openapi.yml"
   ],
   "archived": [],
-  "errors": [],
+  "errors": [
+    "edgegap-openapi.json: dangling $ref: #/definitions/Report%20Deployment%20Payload"
+  ],
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "edgegap-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "edgegap-openapi.json: upgraded swagger 2.0 -> OpenAPI 3.2.0; renamed 1 component key(s) illegal in 3.x (e.g. Report Deployment Payload)",
+    "apis.yml register: written (+6 apis, 12 total)"
   ],
-  "skipped": [
-    "edgegap-app-versions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "edgegap-applications-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "edgegap-deployments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "edgegap-fleets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "edgegap-matchmaking-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "edgegap-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "edgegap-relays-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "edgegap-sessions-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

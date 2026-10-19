@@ -1,0 +1,1108 @@
+openapi: 3.2.0
+info:
+  title: Edgegap V1 Endpoint Storage API
+  version: 0.0.0
+  description: 'Introduction
+
+
+    The Edgegap API lets you manage all your resources from standard HTTP requests. We promote using them to automate all your processes that are using Edgegap.
+
+
+    If you have any questions, don''t hesitate to contact us via email, or you can also jump on our Discord. We will be happy to help. Feel free to make features request; we also love those.
+
+
+    Pagination - Response​
+
+
+    The GET response body can be returned with pagination to avoid requesting all the data at once.
+
+
+    Pagination object will always be under the paginator key.
+
+
+    {
+
+    "number": "The Current page, default=1",
+
+    "next_page_number": "The Next page number or null",
+
+    "previous_page_number": "The Previous page number or null",
+
+    "paginator": {
+
+    "num_pages": "The total numbers of pages"
+
+    },
+
+    "has_next": "Boolean if there is a next page",
+
+    "has_previous": "Boolean if there is a previous page"
+
+    }
+
+
+    Full Body Example:
+
+
+    {
+
+    "count": 100,
+
+    "data": ["value-0", "[...]", "value-9"],
+
+    "success": true,
+
+    "pagination": {
+
+    "number": 1,
+
+    "next_page_number": 2,
+
+    "previous_page_number": null,
+
+    "paginator": {
+
+    "num_pages": 10
+
+    },
+
+    "has_next": true,
+
+    "has_previous": false
+
+    }
+
+    }
+
+
+    Pagination - Parameters​
+
+
+    You can add those values to manipulate the pagination object in the URL Parameters.
+
+
+    page
+
+
+    limit
+
+
+    Example:
+
+
+    # To get the second page
+
+    GET - https://api.edgegap.com/v1/apps?page=2
+
+
+    # To change the count of element in one page (20/page)
+
+    GET - https://api.edgegap.com/v1/apps?limit=20
+
+
+    # You can mix those (20/page, second page)
+
+    GET - https://api.edgegap.com/v1/apps?page=2&limit=20'
+  termsOfService: https://console.edgegap.com/terms-of-service
+  contact:
+    name: Email
+    email: info@edgegap.com
+    url: https://edgegap.com
+servers:
+- url: https://api.edgegap.com
+security:
+- apiKey: []
+tags:
+- name: Endpoint Storage
+  description: Endpoint Storage Control API - Please refer to this documentation to get started with storage.
+paths:
+  /v1/storage/endpoint:
+    post:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointStoragePostResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Create a New Endpoint Storage
+      description: Create an endpoint storage to store your container logs at the end of a deployment.
+      operationId: endpoint-create
+      tags:
+      - Endpoint Storage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndpointStoragePostPayload'
+        required: true
+  /v1/storage/endpoint/{endpoint_name}:
+    parameters:
+    - name: endpoint_name
+      in: path
+      required: true
+      schema:
+        type: string
+    delete:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+      summary: Delete an Endpoint Storage
+      description: Delete an endpoint storage. All the application versions linked to it won't be able to store logs anymore.
+      operationId: endpoint-delete
+      tags:
+      - Endpoint Storage
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointStorageGetResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Get an Endpoint Storage
+      description: Retrieve an endpoint storage. The ```secret_access_key``` won't be displayed.
+      operationId: endpoint-get
+      tags:
+      - Endpoint Storage
+    patch:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointStoragePatchResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Update an Endpoint Storage
+      description: Update an Endpoint Storage with new specifications.
+      operationId: endpoint-update
+      tags:
+      - Endpoint Storage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndpointStoragePatchPayload'
+        required: true
+  /v1/storage/endpoint/{endpoint_name}/pull-profile:
+    parameters:
+    - name: endpoint_name
+      in: path
+      required: true
+      schema:
+        type: string
+    post:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullProfilePostResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Create a New Pull Profile
+      description: Create a pull profile. Pull profile will upload data from an endpoint storage to a deployment container on boot. You must link the application version to the pull profile first.
+      operationId: pull-profile-create
+      tags:
+      - Endpoint Storage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PullProfilePostPayload'
+        required: true
+  /v1/storage/endpoint/{endpoint_name}/pull-profile/{pull_profile_name}:
+    parameters:
+    - name: endpoint_name
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: pull_profile_name
+      in: path
+      required: true
+      schema:
+        type: string
+    delete:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+      summary: Delete a Pull Profile
+      description: Delete a pull profile. All the application versions linked won't receive the data upload anymore. It will not delete your endpoint storage.
+      operationId: pull-profile-delete
+      tags:
+      - Endpoint Storage
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullProfileGetResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Get a Pull Profile
+      description: Retrieve a pull profile and its specifications.
+      operationId: pull-profile-get
+      tags:
+      - Endpoint Storage
+    patch:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PulloProfilePatchResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Update a Pull Profile
+      description: Update a pull profile with new specifications.
+      operationId: pull-profile-update
+      tags:
+      - Endpoint Storage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PullProfilePatchPayload'
+        required: true
+  /v1/storage/endpoint/{endpoint_name}/pull-profile/{pull_profile_name}/app/{app_name}/version/{version_name}:
+    parameters:
+    - name: endpoint_name
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: pull_profile_name
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: app_name
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: version_name
+      in: path
+      required: true
+      schema:
+        type: string
+    put:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullProfileAppVersionLinkResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: Link a Pull Profile to an Application Version
+      description: Link a pull profile to an app version. Without a link, the pull profile by itself will do nothing.
+      operationId: pull-profile-link-app-version
+      tags:
+      - Endpoint Storage
+    delete:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: Success
+      summary: Unlink a Pull Profile From an Application Version
+      description: Unlink a pull profile from an app version. It will not delete the pull profile.
+      operationId: pull-profile-unlink-app-version
+      tags:
+      - Endpoint Storage
+  /v1/storage/endpoint/{endpoint_name}/pull-profiles:
+    parameters:
+    - name: endpoint_name
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullProfilesListResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: List All Pull Profile of an Endpoint Storage
+      description: List all pull profiles of an endpoint storage.
+      operationId: pull-profile-list
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        description: Limit of pull profiles for each page
+        schema:
+          type: integer
+          default: 10
+      tags:
+      - Endpoint Storage
+  /v1/storage/endpoints:
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointStorageListResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: List All Endpoint Storage
+      description: List all endpoint storage.
+      operationId: endpoints-list
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        description: Limit of Fleet for each page
+        schema:
+          type: integer
+          default: 10
+      - name: X-Fields
+        in: header
+        description: An optional fields mask
+        schema:
+          type: string
+          format: mask
+      tags:
+      - Endpoint Storage
+components:
+  schemas:
+    EndpointStorageListResponse:
+      properties:
+        endpoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/EndpointStorageGetResponse'
+        pagination:
+          description: Pagination Object
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    Paginator:
+      properties:
+        num_pages:
+          type: integer
+          description: Total pages count
+      type: object
+    PullProfilePostResponse:
+      required:
+      - destination
+      - name
+      - source
+      - source_type
+      properties:
+        name:
+          type: string
+          description: Name of the pull profile
+          example: pull_profile_name
+        source:
+          type: string
+          description: Source in the S3 bucket to fetch from
+          example: /my-bucket/config.cfg
+        source_type:
+          type: string
+          description: If the source is a File or a Directory
+          example: File
+          enum:
+          - File
+          - Folder
+        destination:
+          type: string
+          description: Destination path where your source will be uploaded in your container. Make sure to avoid protected destinations, such as `/etc/`, as this will prevent the files from being copied to your deployment, and will make your deployment fail. Make sure a normal user can write to the destination folder.
+          example: /usr/share/configs
+        create_time:
+          type: string
+          description: UTC time of pull profile creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of pull profile last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    PulloProfilePatchResponse:
+      properties:
+        name:
+          type: string
+          description: Name of the pull profile
+          example: pull_profile_name
+        source:
+          type: string
+          description: Source in the S3 bucket to fetch from
+          example: /my-bucket/config.cfg
+        source_type:
+          type: string
+          description: If the source is a File or a Directory
+          example: File
+          enum:
+          - File
+          - Folder
+        destination:
+          type: string
+          description: Destination path where your source will be uploaded in your container. Make sure to avoid protected destinations, such as `/etc/`, as this will prevent the files from being copied to your deployment, and will make your deployment fail. Make sure a normal user can write to the destination folder.
+          example: /usr/share/configs
+        create_time:
+          type: string
+          description: UTC time of pull profile creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of pull profile last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    EndpointStoragePatchPayload:
+      properties:
+        name:
+          type: string
+          description: Name of the Endpoint Storage
+          example: my-s3-endpoint
+        access_key_id:
+          type: string
+          description: Your access key ID to connect to your S3 Bucket.
+          example: my-access-key-id
+        endpoint:
+          type: string
+          description: Full URL to your S3 Bucket with https or http. It's recommended to not include your bucket name as a subdomain
+          example: https://us-east-1.your-s3-provider.com
+        bucket:
+          type: string
+          description: Your secret access key to connect to your S3 Bucket. Will be encrypted.
+          example: my-bucket
+        output_format:
+          type: string
+          description: The format how the logs will be exported to the bucket.
+          default: TEXT
+          example: NDJSON
+          enum:
+          - TEXT
+          - NDJSON
+        container_log_version:
+          type: string
+          description: Log pipeline version. `v1` stores a single file per deployment at the end of the run. `v2` uses a streaming pipeline that writes chunked logs to S3 in real time.
+          example: v1
+          enum:
+          - v1
+          - v2
+        secret_access_key:
+          type: string
+          description: Your secret access key to connect to your S3 Bucket. Will be encrypted.
+          example: my-secret-access
+      type: object
+    Pagination:
+      properties:
+        number:
+          type: integer
+          description: Current page number
+        next_page_number:
+          type: integer
+          description: Next page number
+        previous_page_number:
+          type: integer
+          description: Previous page number
+        paginator:
+          $ref: '#/components/schemas/Paginator'
+        has_next:
+          type: boolean
+          description: If there is a next page
+        has_previous:
+          type: boolean
+          description: If there is a previous page
+      type: object
+    PullProfilePostPayload:
+      required:
+      - destination
+      - name
+      - source
+      - source_type
+      properties:
+        name:
+          type: string
+          description: Name of the pull profile
+          example: pull_profile_name
+        source:
+          type: string
+          description: Source in the S3 bucket to fetch from
+          example: /my-bucket/config.cfg
+        source_type:
+          type: string
+          description: If the source is a File or a Directory
+          example: File
+          enum:
+          - File
+          - Folder
+        destination:
+          type: string
+          description: Destination path where your source will be uploaded in your container. Make sure to avoid protected destinations, such as `/etc/`, as this will prevent the files from being copied to your deployment, and will make your deployment fail. Make sure a normal user can write to the destination folder.
+          example: /usr/share/configs
+      type: object
+    EndpointStoragePatchResponse:
+      properties:
+        name:
+          type: string
+          description: Name of the Endpoint Storage
+          example: my-s3-endpoint
+        access_key_id:
+          type: string
+          description: Your access key ID to connect to your S3 Bucket.
+          example: my-access-key-id
+        endpoint:
+          type: string
+          description: Full URL to your S3 Bucket with https or http. It's recommended to not include your bucket name as a subdomain
+          example: https://us-east-1.your-s3-provider.com
+        bucket:
+          type: string
+          description: Your secret access key to connect to your S3 Bucket. Will be encrypted.
+          example: my-bucket
+        output_format:
+          type: string
+          description: The format how the logs will be exported to the bucket.
+          default: TEXT
+          example: NDJSON
+          enum:
+          - TEXT
+          - NDJSON
+        container_log_version:
+          type: string
+          description: Log pipeline version. `v1` stores a single file per deployment at the end of the run. `v2` uses a streaming pipeline that writes chunked logs to S3 in real time.
+          example: v1
+          enum:
+          - v1
+          - v2
+        create_time:
+          type: string
+          description: UTC time of endpoint storage creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of endpoint storage last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    EndpointStoragePostResponse:
+      required:
+      - access_key_id
+      - bucket
+      - endpoint
+      - name
+      properties:
+        name:
+          type: string
+          description: Name of the Endpoint Storage
+          example: my-s3-bucket
+        access_key_id:
+          type: string
+          description: Your access key ID to connect to your S3 Bucket.
+          example: my-access-key-id
+        endpoint:
+          type: string
+          description: Full URL to your S3 Bucket with https or http. It's recommended to not include your bucket name as a subdomain
+          example: https://us-east-1.your-s3-provider.com
+        bucket:
+          type: string
+          description: Your secret access key to connect to your S3 Bucket. Will be encrypted.
+          example: my-bucket
+        output_format:
+          type: string
+          description: The format how the logs will be exported to the bucket.
+          default: TEXT
+          example: NDJSON
+          enum:
+          - TEXT
+          - NDJSON
+        container_log_version:
+          type: string
+          description: Log pipeline version. `v1` (default) stores a single file per deployment at the end of the run. `v2` uses a streaming pipeline that writes chunked logs to S3 in real time.
+          default: v1
+          example: v1
+          enum:
+          - v1
+          - v2
+        create_time:
+          type: string
+          description: UTC time of endpoint creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of endpoint last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    PullProfilesListResponse:
+      properties:
+        pull_profiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/PullProfileGetResponse'
+        pagination:
+          description: Pagination Object
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    PullProfilePatchPayload:
+      properties:
+        name:
+          type: string
+          description: Name of the pull profile
+          example: pull_profile_name
+        source:
+          type: string
+          description: Source in the S3 bucket to fetch from
+          example: /my-bucket/config.cfg
+        source_type:
+          type: string
+          description: If the source is a File or a Directory
+          example: File
+          enum:
+          - File
+          - Folder
+        destination:
+          type: string
+          description: Destination path where your source will be uploaded in your container. Make sure to avoid protected destinations, such as `/etc/`, as this will prevent the files from being copied to your deployment, and will make your deployment fail. Make sure a normal user can write to the destination folder.
+          example: /usr/share/configs
+      type: object
+    EndpointStoragePostPayload:
+      required:
+      - access_key_id
+      - bucket
+      - endpoint
+      - name
+      - secret_access_key
+      properties:
+        name:
+          type: string
+          description: Name of the Endpoint Storage
+          example: my-s3-bucket
+        access_key_id:
+          type: string
+          description: Your access key ID to connect to your S3 Bucket.
+          example: my-access-key-id
+        endpoint:
+          type: string
+          description: Full URL to your S3 Bucket with https or http. It's recommended to not include your bucket name as a subdomain
+          example: https://us-east-1.your-s3-provider.com
+        bucket:
+          type: string
+          description: Your secret access key to connect to your S3 Bucket. Will be encrypted.
+          example: my-bucket
+        output_format:
+          type: string
+          description: The format how the logs will be exported to the bucket.
+          default: TEXT
+          example: NDJSON
+          enum:
+          - TEXT
+          - NDJSON
+        container_log_version:
+          type: string
+          description: Log pipeline version. `v1` (default) stores a single file per deployment at the end of the run. `v2` uses a streaming pipeline that writes chunked logs to S3 in real time.
+          default: v1
+          example: v1
+          enum:
+          - v1
+          - v2
+        secret_access_key:
+          type: string
+          description: Your secret access key to connect to your S3 Bucket. Will be encrypted.
+          example: my-secret-access
+      type: object
+    EndpointStorageGetResponse:
+      required:
+      - access_key_id
+      - bucket
+      - endpoint
+      - name
+      properties:
+        name:
+          type: string
+          description: Name of the Endpoint Storage
+          example: my-s3-endpoint
+        access_key_id:
+          type: string
+          description: Your access key ID to connect to your S3 Bucket.
+          example: my-access-key-id
+        endpoint:
+          type: string
+          description: Full URL to your S3 Bucket with https or http. It's recommended to not include your bucket name as a subdomain
+          example: https://us-east-1.your-s3-provider.com
+        bucket:
+          type: string
+          description: Your secret access key to connect to your S3 Bucket. Will be encrypted.
+          example: my-bucket
+        output_format:
+          type: string
+          description: The format how the logs will be exported to the bucket.
+          default: TEXT
+          example: NDJSON
+          enum:
+          - TEXT
+          - NDJSON
+        create_time:
+          type: string
+          description: UTC time of endpoint storage creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of endpoint storage last update
+          example: '2022-01-01 00:00:00.000000'
+        container_log_version:
+          type: string
+          description: Log pipeline version (`v1` or `v2`).
+          example: v1
+          enum:
+          - v1
+          - v2
+      type: object
+    PullProfileGetResponse:
+      required:
+      - destination
+      - name
+      - source
+      - source_type
+      properties:
+        name:
+          type: string
+          description: Name of the pull profile
+          example: pull_profile_name
+        source:
+          type: string
+          description: Source in the S3 bucket to fetch from
+          example: /my-bucket/config.cfg
+        source_type:
+          type: string
+          description: If the source is a File or a Directory
+          example: File
+          enum:
+          - File
+          - Folder
+        destination:
+          type: string
+          description: Destination path where your source will be uploaded in your container. Make sure to avoid protected destinations, such as `/etc/`, as this will prevent the files from being copied to your deployment, and will make your deployment fail. Make sure a normal user can write to the destination folder.
+          example: /usr/share/configs
+        create_time:
+          type: string
+          description: UTC time of pull profile creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of pull profile last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+    Error:
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: A message depending of the request termination
+      type: object
+    PullProfileAppVersionLinkResponse:
+      required:
+      - app
+      - app_version
+      - endpoint
+      - pull_profile
+      properties:
+        app:
+          type: string
+          description: Name of the linked app of the linked version
+          example: app_name
+        app_version:
+          type: string
+          description: Name of the linked app version.
+          example: version_name
+        endpoint:
+          type: string
+          description: Name of the endpoint storage
+          example: endpoint_name
+        pull_profile:
+          type: string
+          description: Name of the pull profile the app version is linked to.
+          example: pull_profile_name
+        create_time:
+          type: string
+          description: UTC time of link creation
+          example: '2022-01-01 00:00:00.000000'
+        last_updated:
+          type: string
+          description: UTC time of link last update
+          example: '2022-01-01 00:00:00.000000'
+      type: object
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: authorization
+      description: 'To access Edgegap API, generate (and view) your secret tokens in Dashboard - User Settings / Tokens. Add your secret token with each API request as an HTTP header (include the word token): `Authorization: token xxxxxxxx-e458-4592-b607-c2c28afd8b62`'

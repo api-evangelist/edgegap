@@ -1,0 +1,347 @@
+openapi: 3.2.0
+info:
+  title: Edgegap V1 Locations API
+  version: 0.0.0
+  description: 'Introduction
+
+
+    The Edgegap API lets you manage all your resources from standard HTTP requests. We promote using them to automate all your processes that are using Edgegap.
+
+
+    If you have any questions, don''t hesitate to contact us via email, or you can also jump on our Discord. We will be happy to help. Feel free to make features request; we also love those.
+
+
+    Pagination - Response​
+
+
+    The GET response body can be returned with pagination to avoid requesting all the data at once.
+
+
+    Pagination object will always be under the paginator key.
+
+
+    {
+
+    "number": "The Current page, default=1",
+
+    "next_page_number": "The Next page number or null",
+
+    "previous_page_number": "The Previous page number or null",
+
+    "paginator": {
+
+    "num_pages": "The total numbers of pages"
+
+    },
+
+    "has_next": "Boolean if there is a next page",
+
+    "has_previous": "Boolean if there is a previous page"
+
+    }
+
+
+    Full Body Example:
+
+
+    {
+
+    "count": 100,
+
+    "data": ["value-0", "[...]", "value-9"],
+
+    "success": true,
+
+    "pagination": {
+
+    "number": 1,
+
+    "next_page_number": 2,
+
+    "previous_page_number": null,
+
+    "paginator": {
+
+    "num_pages": 10
+
+    },
+
+    "has_next": true,
+
+    "has_previous": false
+
+    }
+
+    }
+
+
+    Pagination - Parameters​
+
+
+    You can add those values to manipulate the pagination object in the URL Parameters.
+
+
+    page
+
+
+    limit
+
+
+    Example:
+
+
+    # To get the second page
+
+    GET - https://api.edgegap.com/v1/apps?page=2
+
+
+    # To change the count of element in one page (20/page)
+
+    GET - https://api.edgegap.com/v1/apps?limit=20
+
+
+    # You can mix those (20/page, second page)
+
+    GET - https://api.edgegap.com/v1/apps?page=2&limit=20'
+  termsOfService: https://console.edgegap.com/terms-of-service
+  contact:
+    name: Email
+    email: info@edgegap.com
+    url: https://edgegap.com
+servers:
+- url: https://api.edgegap.com
+security:
+- apiKey: []
+tags:
+- name: Locations
+  description: Locations API - Please refer to this documentation to get started with locations beacons.
+paths:
+  /v1/locations:
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locations'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      summary: List All Locations
+      description: List all the locations available to deploy on. You can specify an application and a version to filter out the locations that don’t have enough resources to deploy this application version.
+      operationId: locations-get
+      parameters:
+      - name: app
+        in: query
+        description: The App Name you want to filter with capacity
+        schema:
+          type: string
+      - name: version
+        in: query
+        description: The Version Name you want to filter with capacity
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: The type of the location
+        schema:
+          type: string
+      - name: tags
+        in: query
+        description: 'Gets locations with tags. Set to: "true" to have the tags'
+        schema:
+          type: string
+      tags:
+      - Locations
+  /v1/locations/beacons:
+    get:
+      responses:
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationBeaconList'
+      summary: List All Location Beacons
+      description: List all the active location beacons. They can be used to ping them for your matchmaking system. You cannot deploy on beacons.
+      operationId: location-beacon-list
+      tags:
+      - Locations
+components:
+  schemas:
+    Locations:
+      properties:
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+        messages:
+          type: array
+          description: Extra Messages for the query
+          example:
+          - ''
+          items:
+            type: string
+      type: object
+    Tag:
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          description: Tag's Key
+          example: key
+        value:
+          type: string
+          description: Tag's Value
+          example: value
+      type: object
+    api-model-location:
+      required:
+      - administrative_division
+      - city
+      - continent
+      - country
+      - latitude
+      - longitude
+      - timezone
+      properties:
+        city:
+          type: string
+          description: City of the object
+        country:
+          type: string
+          description: Country of the object
+        continent:
+          type: string
+          description: Continent of the object
+        administrative_division:
+          type: string
+          description: Administrative division of the object
+        timezone:
+          type: string
+          description: Timezone of the object
+        latitude:
+          type: number
+          description: Latitude of the object
+        longitude:
+          type: number
+          description: Longitude of the object
+      type: object
+    LocationBeaconList:
+      properties:
+        locations:
+          type: array
+          description: Total number of active location beacons
+          items:
+            $ref: '#/components/schemas/api-model-locationbeacon'
+        count:
+          type: integer
+          description: List of active location beacons
+          example: 1
+      type: object
+    Location:
+      required:
+      - administrative_division
+      - city
+      - continent
+      - country
+      - latitude
+      - longitude
+      - timezone
+      - type
+      properties:
+        city:
+          type: string
+          description: City Name
+          example: Montreal
+        continent:
+          type: string
+          description: Continent Name
+          example: North America
+        country:
+          type: string
+          description: Country name
+          example: Canada
+        timezone:
+          type: string
+          description: Timezone name
+          example: Eastern Time
+        administrative_division:
+          type: string
+          description: Administrative Division
+          example: Quebec
+        latitude:
+          type: number
+          description: The Latitude in decimal
+          example: '45.3324097'
+        longitude:
+          type: number
+          description: The Longitude in decimal
+          example: '-73.2693626'
+        type:
+          type: string
+          description: The type of location
+          example: standard
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+      type: object
+    api-model-locationbeacon:
+      required:
+      - host
+      - location
+      properties:
+        host:
+          type: string
+          description: The URL of the pingable location.
+        fqdn:
+          type: string
+          description: Auto Generated Field for fqdn
+        udp_port:
+          type: integer
+          description: The open UDP port number for UDP pings, if available.
+        tcp_port:
+          type: integer
+          description: The open TCP port number for TCP pings, if available.
+        location:
+          $ref: '#/components/schemas/api-model-location'
+      type: object
+    Error:
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: A message depending of the request termination
+      type: object
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: authorization
+      description: 'To access Edgegap API, generate (and view) your secret tokens in Dashboard - User Settings / Tokens. Add your secret token with each API request as an HTTP header (include the word token): `Authorization: token xxxxxxxx-e458-4592-b607-c2c28afd8b62`'
