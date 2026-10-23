@@ -1189,3 +1189,9 @@ components:
       in: header
       name: authorization
       description: 'To access Edgegap API, generate (and view) your secret tokens in Dashboard - User Settings / Tokens. Add your secret token with each API request as an HTTP header (include the word token): `Authorization: token xxxxxxxx-e458-4592-b607-c2c28afd8b62`'
+x-provenance:
+  method: harvested
+  publisher: Edgegap
+  source: https://api.edgegap.com/swagger.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
