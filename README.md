@@ -1,4 +1,4 @@
-# Edgegap (edgegap)
+# Edgegap
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,190 +66,130 @@
 
 Edgegap provides distributed edge game-server orchestration, hosting, and matchmaking. Its Arbitrium platform auto-deploys dedicated game servers as containers to the optimal edge location out of 615+ locations worldwide, reducing latency for players. The REST API covers applications, versions, deployments, sessions, matchmaking, distributed relays, monitoring, and private fleets.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/edgegap/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/edgegap/refs/heads/main/apis.yml)
+**Areas:** Game Servers · Edge Computing · Matchmaking · Hosting · Container Orchestration
 
-## Tags
+## Edgegap on APIs.io
 
-- Game Servers
-- Orchestration
-- Edge Computing
-- Matchmaking
-- Hosting
+Everything profiled for Edgegap is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/edgegap/](https://apis.io/providers/edgegap/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (8)
 
-- **Created:** 2026-07-01
-- **Modified:** 2026-07-01
+- [Edgegap App Versions API](https://apis.io/apis/edgegap/edgegap-app-versions-api/) — Manage container image versions for an application.
+- [Edgegap Applications API](https://apis.io/apis/edgegap/edgegap-applications-api/) — Manage applications registered on Edgegap.
+- [Edgegap Deployments API](https://apis.io/apis/edgegap/edgegap-deployments-api/) — Deploy, inspect, and stop dedicated game servers at the edge.
+- [Edgegap Fleets API](https://apis.io/apis/edgegap/edgegap-fleets-api/) — Private fleet deployments and host inventory.
+- [Edgegap Matchmaking API](https://apis.io/apis/edgegap/edgegap-matchmaking-api/) — Create and poll matchmaking tickets.
+- [Edgegap Metrics API](https://apis.io/apis/edgegap/edgegap-metrics-api/) — Monitoring and telemetry for deployments.
+- [Edgegap Relays API](https://apis.io/apis/edgegap/edgegap-relays-api/) — Distributed relay sessions and per-user authorization.
+- [Edgegap Sessions API](https://apis.io/apis/edgegap/edgegap-sessions-api/) — Add and remove players or groups on a running deployment.
 
-## APIs
+### Published properties
 
-### Edgegap Applications API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Register and manage applications on Edgegap, including activation state and telemetry agent configuration, via paginated list, create, get, update, and delete operations under /v1/app.
+#### Agentic access (1)
 
-- **Human URL:** [https://docs.edgegap.com/docs/api/dedicated-servers](https://docs.edgegap.com/docs/api/dedicated-servers)
-- **Base URL:** `https://api.edgegap.com`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Edgegap Agentic Access](https://apis.io/agentic-access/edgegap/edgegap-agentic-access/)
 
-- Applications
-- Game Servers
+#### Collections (9)
 
-#### Properties
+Postman and Open Collection request collections.
 
-- [Documentation](https://docs.edgegap.com/docs/api/dedicated-servers)
-- [OpenAPI](openapi/edgegap-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/edgegap.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/edgegap.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Edgegap Arbitrium API](https://apis.io/collections/edgegap/open-edgegap/)
+- [Edgegap Arbitrium App Versions API](https://apis.io/collections/edgegap/open-edgegap-app-versions-api/)
+- [Edgegap Arbitrium App Versions Applications API](https://apis.io/collections/edgegap/open-edgegap-applications-api/)
+- [Edgegap Arbitrium App Versions Deployments API](https://apis.io/collections/edgegap/open-edgegap-deployments-api/)
+- [Edgegap Arbitrium App Versions Fleets API](https://apis.io/collections/edgegap/open-edgegap-fleets-api/)
+- [Edgegap Arbitrium App Versions Matchmaking API](https://apis.io/collections/edgegap/open-edgegap-matchmaking-api/)
+- [Edgegap Arbitrium App Versions Metrics API](https://apis.io/collections/edgegap/open-edgegap-metrics-api/)
+- [Edgegap Arbitrium App Versions Relays API](https://apis.io/collections/edgegap/open-edgegap-relays-api/)
+- [Edgegap Arbitrium App Versions Sessions API](https://apis.io/collections/edgegap/open-edgegap-sessions-api/)
 
-### Edgegap App Versions API
+#### Security (2)
 
-Manage container image versions for an application - Docker repository/image/tag, vCPU and memory, ports, environment variables, and session configuration - via /v1/app/{app_name}/version endpoints.
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://docs.edgegap.com/docs/api/versioning](https://docs.edgegap.com/docs/api/versioning)
-- **Base URL:** `https://api.edgegap.com`
+- [Edgegap Authentication](https://apis.io/security/edgegap/edgegap-authentication/)
+- [Edgegap Domain Security](https://apis.io/security/edgegap/edgegap-domain-security/)
 
-#### Tags
+#### Plans and pricing (1)
 
-- App Versions
-- Container Images
+Published plans, tiers and prices.
 
-#### Properties
+- [Edgegap Plans Pricing](https://apis.io/plans/edgegap/edgegap-plans-pricing/)
 
-- [Documentation](https://docs.edgegap.com/docs/api/versioning)
-- [OpenAPI](openapi/edgegap-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/edgegap.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/edgegap.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Rate limits (1)
 
-### Edgegap Deployments API
+Published request limits.
 
-Auto-deploy dedicated servers to the optimal edge location for supplied player IPs or coordinates, then list, inspect status, tag, pull container logs, and stop deployments via /v2/deployments and /v1/deployments endpoints.
+- [Edgegap Rate Limits](https://apis.io/rate-limits/edgegap/edgegap-rate-limits/)
 
-- **Human URL:** [https://docs.edgegap.com/learn/orchestration/deployments](https://docs.edgegap.com/learn/orchestration/deployments)
-- **Base URL:** `https://api.edgegap.com`
+#### FinOps (1)
 
-#### Tags
+What the API costs to run, by operation.
 
-- Deployments
-- Dedicated Servers
-- Edge
+- [Edgegap Finops](https://apis.io/finops/edgegap/edgegap-finops/)
 
-#### Properties
+## Where to find this API
 
-- [Documentation](https://docs.edgegap.com/learn/orchestration/deployments)
-- [OpenAPI](openapi/edgegap-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/edgegap.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/edgegap.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### Edgegap Sessions API
-
-Dynamically add or remove players and groups of players on a running deployment. Create, get, and delete sessions and list session users via /v1/session endpoints for server-to-server session integration.
-
-- **Human URL:** [https://docs.edgegap.com/docs/session](https://docs.edgegap.com/docs/session)
-- **Base URL:** `https://api.edgegap.com`
-
-#### Tags
-
-- Sessions
-- Player Management
-
-#### Properties
-
-- [Documentation](https://docs.edgegap.com/docs/session)
-- [OpenAPI](openapi/edgegap-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/edgegap.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/edgegap.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Edgegap Matchmaking API
-
-Create and poll matchmaking tickets on a deployed matchmaker service. Tickets are matched into groups and a server is auto-deployed at the edge for the matched players, exposed via /tickets endpoints.
-
-- **Human URL:** [https://docs.edgegap.com/learn/api/matchmaking](https://docs.edgegap.com/learn/api/matchmaking)
-- **Base URL:** `https://api.edgegap.com`
-
-#### Tags
-
-- Matchmaking
-- Tickets
-
-#### Properties
-
-- [Documentation](https://docs.edgegap.com/learn/api/matchmaking)
-- [OpenAPI](openapi/edgegap-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/edgegap.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/edgegap.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Edgegap Relays API
-
-Create distributed relay sessions that route peer-to-peer or client-server traffic through Edgegap's network, hiding player IPs and mitigating DDoS. List, get, delete sessions and authorize/revoke users via /v1/relays/sessions endpoints.
-
-- **Human URL:** [https://docs.edgegap.com/docs/api/relays](https://docs.edgegap.com/docs/api/relays)
-- **Base URL:** `https://api.edgegap.com`
-
-#### Tags
-
-- Relays
-- Networking
-- Anti-DDoS
-
-#### Properties
-
-- [Documentation](https://docs.edgegap.com/docs/api/relays)
-- [OpenAPI](openapi/edgegap-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/edgegap.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/edgegap.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Edgegap Metrics API
-
-Retrieve monitoring telemetry - CPU, memory, and network metrics - for a running deployment via /v1/metrics/deployment/{deployment_id} to observe dedicated server health at the edge.
-
-- **Human URL:** [https://docs.edgegap.com/docs/api/dedicated-servers](https://docs.edgegap.com/docs/api/dedicated-servers)
-- **Base URL:** `https://api.edgegap.com`
-
-#### Tags
-
-- Metrics
-- Monitoring
-- Telemetry
-
-#### Properties
-
-- [Documentation](https://docs.edgegap.com/docs/api/dedicated-servers)
-- [OpenAPI](openapi/edgegap-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/edgegap.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/edgegap.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Edgegap Fleets API
-
-Deploy onto self-managed hosts registered in a private fleet for hybrid infrastructure, and enumerate fleet hosts, via /v2/private-fleets/deployments and /v2/private-fleets/{fleet_name}/hosts.
-
-- **Human URL:** [https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy](https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy)
-- **Base URL:** `https://api.edgegap.com`
-
-#### Tags
-
-- Fleets
-- Private Hosts
-- Hybrid
-
-#### Properties
-
-- [Documentation](https://docs.edgegap.com/docs/deployment/session/fleet-manager/fleet-policy)
-- [OpenAPI](openapi/edgegap-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/edgegap.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/edgegap.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/edgegap)
-- [LinkedIn](https://www.linkedin.com/company/edgegap)
 - [Website](https://edgegap.com/)
 - [Documentation](https://docs.edgegap.com/)
-- [Plans](plans/edgegap-plans-pricing.yml)
-- [Rate Limits](rate-limits/edgegap-rate-limits.yml)
-- [Fin Ops](finops/edgegap-finops.yml)
+- [Blog](https://edgegap.com/blog)
+- [GitHub](https://github.com/edgegap)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 24.5** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 45.7 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 23.8 |
+| Access clarity | 7.9 |
+
+**Agent readiness 17.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 11.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/edgegap/](https://apis.io/providers/edgegap/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Edgegap: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/edgegap/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
